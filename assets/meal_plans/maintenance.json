@@ -1,0 +1,89 @@
+{
+  "id": "meal_maintenance",
+  "name": "Maintenance Meal Plan",
+  "type": "maintenance",
+  "description": "Balanced maintenance plan at TDEE. Clean, nutritious foods to maintain body composition and support training performance.",
+  "totalCalories": 2700,
+  "proteinGrams": 170,
+  "carbGrams": 310,
+  "fatGrams": 75,
+  "meals": [
+    {
+      "id": "meal_m_1",
+      "name": "Balanced Breakfast",
+      "type": "breakfast",
+      "time": "07:30",
+      "calories": 580,
+      "proteinGrams": 38,
+      "carbGrams": 65,
+      "fatGrams": 16,
+      "ingredients": [
+        { "name": "Whole Eggs", "grams": 150, "calories": 215, "proteinGrams": 18, "carbGrams": 1, "fatGrams": 15 },
+        { "name": "Whole Grain Toast", "grams": 80, "calories": 200, "proteinGrams": 8, "carbGrams": 38, "fatGrams": 2 },
+        { "name": "Avocado", "grams": 80, "calories": 128, "proteinGrams": 1.6, "carbGrams": 6.8, "fatGrams": 11.7 },
+        { "name": "Orange Juice", "grams": 200, "calories": 90, "proteinGrams": 1.4, "carbGrams": 21, "fatGrams": 0.4 }
+      ]
+    },
+    {
+      "id": "meal_m_2",
+      "name": "Morning Snack",
+      "type": "midMorning",
+      "time": "10:30",
+      "calories": 300,
+      "proteinGrams": 20,
+      "carbGrams": 40,
+      "fatGrams": 7,
+      "ingredients": [
+        { "name": "Greek Yogurt", "grams": 150, "calories": 98, "proteinGrams": 12.7, "carbGrams": 6.8, "fatGrams": 0.4 },
+        { "name": "Granola", "grams": 40, "calories": 180, "proteinGrams": 4, "carbGrams": 30, "fatGrams": 5 },
+        { "name": "Mixed Berries", "grams": 100, "calories": 47, "proteinGrams": 1.1, "carbGrams": 11, "fatGrams": 0.3 }
+      ]
+    },
+    {
+      "id": "meal_m_3",
+      "name": "Lunch",
+      "type": "lunch",
+      "time": "13:00",
+      "calories": 650,
+      "proteinGrams": 45,
+      "carbGrams": 75,
+      "fatGrams": 18,
+      "ingredients": [
+        { "name": "Grilled Chicken", "grams": 180, "calories": 297, "proteinGrams": 55.8, "carbGrams": 0, "fatGrams": 6.3 },
+        { "name": "Quinoa", "grams": 120, "calories": 144, "proteinGrams": 5.2, "carbGrams": 25.7, "fatGrams": 2.3 },
+        { "name": "Roasted Vegetables", "grams": 200, "calories": 120, "proteinGrams": 4, "carbGrams": 24, "fatGrams": 2 },
+        { "name": "Olive Oil", "grams": 10, "calories": 88, "proteinGrams": 0, "carbGrams": 0, "fatGrams": 9.9 }
+      ]
+    },
+    {
+      "id": "meal_m_4",
+      "name": "Pre-Workout",
+      "type": "preWorkout",
+      "time": "16:30",
+      "calories": 380,
+      "proteinGrams": 28,
+      "carbGrams": 55,
+      "fatGrams": 7,
+      "ingredients": [
+        { "name": "Whey Protein", "grams": 30, "calories": 120, "proteinGrams": 24, "carbGrams": 3, "fatGrams": 1.5 },
+        { "name": "Banana", "grams": 150, "calories": 134, "proteinGrams": 1.6, "carbGrams": 34, "fatGrams": 0.5 },
+        { "name": "Peanut Butter", "grams": 20, "calories": 120, "proteinGrams": 5, "carbGrams": 4, "fatGrams": 10 }
+      ]
+    },
+    {
+      "id": "meal_m_5",
+      "name": "Dinner",
+      "type": "dinner",
+      "time": "20:00",
+      "calories": 720,
+      "proteinGrams": 50,
+      "carbGrams": 80,
+      "fatGrams": 18,
+      "ingredients": [
+        { "name": "Lean Beef Mince", "grams": 200, "calories": 340, "proteinGrams": 45, "carbGrams": 0, "fatGrams": 18 },
+        { "name": "Whole Wheat Pasta", "grams": 100, "calories": 352, "proteinGrams": 12.5, "carbGrams": 70, "fatGrams": 1.9 },
+        { "name": "Tomato Sauce", "grams": 100, "calories": 32, "proteinGrams": 1.5, "carbGrams": 7, "fatGrams": 0.5 }
+      ]
+    }
+  ]
+}

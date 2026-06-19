@@ -1,0 +1,124 @@
+{
+  "id": "prog_ppl",
+  "name": "Push Pull Legs",
+  "description": "The classic 6-day split for intermediate-advanced gym goers. Targets muscle groups twice per week with optimal frequency and volume for maximum hypertrophy.",
+  "sport": "gym",
+  "daysPerWeek": 6,
+  "durationWeeks": 8,
+  "level": "intermediate",
+  "thumbnailUrl": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "focus": "Foundation Volume",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Push A",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "4x8", "restSeconds": 120 },
+            { "exerciseId": "ex_002", "exerciseName": "Incline Dumbbell Press", "setsReps": "3x10", "restSeconds": 90 },
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "3x10", "restSeconds": 90 },
+            { "exerciseId": "ex_013", "exerciseName": "Dumbbell Lateral Raises", "setsReps": "4x15", "restSeconds": 60 },
+            { "exerciseId": "ex_017", "exerciseName": "Tricep Rope Pushdown", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_016", "exerciseName": "Skull Crushers", "setsReps": "3x12", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "name": "Pull A",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_004", "exerciseName": "Pull-ups", "setsReps": "4x8", "restSeconds": 120 },
+            { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "4x8", "restSeconds": 120 },
+            { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "3x12", "restSeconds": 75 },
+            { "exerciseId": "ex_028", "exerciseName": "Dumbbell Row", "setsReps": "3x10", "restSeconds": 75 },
+            { "exerciseId": "ex_014", "exerciseName": "Face Pulls", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_015", "exerciseName": "Barbell Bicep Curl", "setsReps": "3x12", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "name": "Legs A",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "4x8", "restSeconds": 180 },
+            { "exerciseId": "ex_009", "exerciseName": "Romanian Deadlift", "setsReps": "3x10", "restSeconds": 120 },
+            { "exerciseId": "ex_010", "exerciseName": "Leg Press", "setsReps": "3x12", "restSeconds": 120 },
+            { "exerciseId": "ex_011", "exerciseName": "Walking Lunges", "setsReps": "3x20", "restSeconds": 90 },
+            { "exerciseId": "ex_024", "exerciseName": "Calf Raises", "setsReps": "4x20", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "name": "Push B",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "4x8", "restSeconds": 120 },
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "3x10", "restSeconds": 90 },
+            { "exerciseId": "ex_003", "exerciseName": "Cable Flyes", "setsReps": "4x12", "restSeconds": 60 },
+            { "exerciseId": "ex_013", "exerciseName": "Dumbbell Lateral Raises", "setsReps": "4x15", "restSeconds": 60 },
+            { "exerciseId": "ex_022", "exerciseName": "Dips", "setsReps": "3x10", "restSeconds": 90 }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "name": "Pull B",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_005", "exerciseName": "Barbell Deadlift", "setsReps": "4x5", "restSeconds": 180 },
+            { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "4x12", "restSeconds": 75 },
+            { "exerciseId": "ex_028", "exerciseName": "Dumbbell Row", "setsReps": "4x10", "restSeconds": 75 },
+            { "exerciseId": "ex_014", "exerciseName": "Face Pulls", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_015", "exerciseName": "Barbell Bicep Curl", "setsReps": "4x10", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 6,
+          "name": "Legs B",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_023", "exerciseName": "Barbell Hip Thrust", "setsReps": "4x10", "restSeconds": 90 },
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x10", "restSeconds": 150 },
+            { "exerciseId": "ex_010", "exerciseName": "Leg Press", "setsReps": "4x15", "restSeconds": 90 },
+            { "exerciseId": "ex_011", "exerciseName": "Walking Lunges", "setsReps": "3x20", "restSeconds": 75 },
+            { "exerciseId": "ex_024", "exerciseName": "Calf Raises", "setsReps": "5x20", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 7,
+          "name": "Rest",
+          "isRestDay": true,
+          "exercises": [],
+          "notes": "Active recovery: walk, stretch, foam roll"
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "focus": "Progressive Overload",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Push A",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "4x8 (+2.5kg)", "restSeconds": 120 },
+            { "exerciseId": "ex_002", "exerciseName": "Incline Dumbbell Press", "setsReps": "3x10 (+2kg)", "restSeconds": 90 },
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "3x10 (+2.5kg)", "restSeconds": 90 },
+            { "exerciseId": "ex_013", "exerciseName": "Dumbbell Lateral Raises", "setsReps": "4x15", "restSeconds": 60 },
+            { "exerciseId": "ex_017", "exerciseName": "Tricep Rope Pushdown", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_016", "exerciseName": "Skull Crushers", "setsReps": "3x12", "restSeconds": 60 }
+          ]
+        },
+        { "dayNumber": 2, "name": "Pull A", "isRestDay": false, "exercises": [{ "exerciseId": "ex_004", "exerciseName": "Pull-ups", "setsReps": "4x9", "restSeconds": 120 }, { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "4x8 (+2.5kg)", "restSeconds": 120 }, { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "3x12", "restSeconds": 75 }, { "exerciseId": "ex_015", "exerciseName": "Barbell Bicep Curl", "setsReps": "3x12", "restSeconds": 60 }] },
+        { "dayNumber": 3, "name": "Legs A", "isRestDay": false, "exercises": [{ "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "4x8 (+5kg)", "restSeconds": 180 }, { "exerciseId": "ex_009", "exerciseName": "Romanian Deadlift", "setsReps": "3x10", "restSeconds": 120 }, { "exerciseId": "ex_010", "exerciseName": "Leg Press", "setsReps": "3x12", "restSeconds": 120 }] },
+        { "dayNumber": 4, "name": "Push B", "isRestDay": false, "exercises": [{ "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "4x8 (+2.5kg)", "restSeconds": 120 }, { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "3x10", "restSeconds": 90 }, { "exerciseId": "ex_003", "exerciseName": "Cable Flyes", "setsReps": "4x12", "restSeconds": 60 }] },
+        { "dayNumber": 5, "name": "Pull B", "isRestDay": false, "exercises": [{ "exerciseId": "ex_005", "exerciseName": "Barbell Deadlift", "setsReps": "4x5 (+5kg)", "restSeconds": 180 }, { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "4x12", "restSeconds": 75 }, { "exerciseId": "ex_015", "exerciseName": "Barbell Bicep Curl", "setsReps": "4x10", "restSeconds": 60 }] },
+        { "dayNumber": 6, "name": "Legs B", "isRestDay": false, "exercises": [{ "exerciseId": "ex_023", "exerciseName": "Barbell Hip Thrust", "setsReps": "4x10 (+5kg)", "restSeconds": 90 }, { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x10", "restSeconds": 150 }, { "exerciseId": "ex_024", "exerciseName": "Calf Raises", "setsReps": "5x20", "restSeconds": 60 }] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    }
+  ]
+}

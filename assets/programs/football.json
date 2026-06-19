@@ -1,0 +1,73 @@
+{
+  "id": "prog_football",
+  "name": "Football Conditioning",
+  "description": "5-day football conditioning program combining strength training with speed, agility, and power development. Designed for serious footballers looking to dominate on the pitch.",
+  "sport": "football",
+  "daysPerWeek": 5,
+  "durationWeeks": 8,
+  "level": "intermediate",
+  "thumbnailUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "focus": "Base Conditioning",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Lower Body Power",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "4x6", "restSeconds": 180, "notes": "Heavy — 80% 1RM" },
+            { "exerciseId": "ex_029", "exerciseName": "Box Jumps", "setsReps": "4x5", "restSeconds": 120 },
+            { "exerciseId": "ex_009", "exerciseName": "Romanian Deadlift", "setsReps": "3x8", "restSeconds": 120 },
+            { "exerciseId": "ex_011", "exerciseName": "Walking Lunges", "setsReps": "3x12 each leg", "restSeconds": 90 },
+            { "exerciseId": "ex_030", "exerciseName": "Kettlebell Swings", "setsReps": "3x20", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "name": "Upper Body Strength",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "4x6", "restSeconds": 120 },
+            { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "4x6", "restSeconds": 120 },
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "3x8", "restSeconds": 90 },
+            { "exerciseId": "ex_004", "exerciseName": "Pull-ups", "setsReps": "3x8", "restSeconds": 90 },
+            { "exerciseId": "ex_019", "exerciseName": "Cable Crunches", "setsReps": "3x15", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "name": "Speed & Agility",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "5x200m sprint", "restSeconds": 120, "notes": "Max effort sprints, full recovery" },
+            { "exerciseId": "ex_029", "exerciseName": "Box Jumps", "setsReps": "3x8", "restSeconds": 90 },
+            { "exerciseId": "ex_026", "exerciseName": "Burpees", "setsReps": "4x10", "restSeconds": 60 },
+            { "exerciseId": "ex_027", "exerciseName": "Jump Rope", "setsReps": "5x60s", "restSeconds": 30 }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "name": "Rest & Recovery",
+          "isRestDay": true,
+          "exercises": [],
+          "notes": "Light stretching, foam rolling, hydration"
+        },
+        {
+          "dayNumber": 5,
+          "name": "Full Body Power",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_005", "exerciseName": "Barbell Deadlift", "setsReps": "4x4", "restSeconds": 180 },
+            { "exerciseId": "ex_030", "exerciseName": "Kettlebell Swings", "setsReps": "4x15", "restSeconds": 75 },
+            { "exerciseId": "ex_023", "exerciseName": "Barbell Hip Thrust", "setsReps": "3x10", "restSeconds": 90 },
+            { "exerciseId": "ex_018", "exerciseName": "Plank", "setsReps": "3x60s", "restSeconds": 60 }
+          ]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    }
+  ]
+}

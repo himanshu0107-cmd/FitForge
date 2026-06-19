@@ -1,0 +1,88 @@
+{
+  "id": "meal_cutting",
+  "name": "Cutting Meal Plan",
+  "type": "cutting",
+  "description": "Calorie-deficit plan for fat loss while preserving muscle. High protein, moderate carbs, controlled fats.",
+  "totalCalories": 2000,
+  "proteinGrams": 180,
+  "carbGrams": 180,
+  "fatGrams": 55,
+  "meals": [
+    {
+      "id": "meal_c_1",
+      "name": "Protein Breakfast",
+      "type": "breakfast",
+      "time": "07:00",
+      "calories": 380,
+      "proteinGrams": 40,
+      "carbGrams": 35,
+      "fatGrams": 8,
+      "ingredients": [
+        { "name": "Egg Whites", "grams": 200, "calories": 104, "proteinGrams": 21.6, "carbGrams": 1.4, "fatGrams": 0.3 },
+        { "name": "Oats", "grams": 60, "calories": 228, "proteinGrams": 7.9, "carbGrams": 41, "fatGrams": 4.3 },
+        { "name": "Strawberries", "grams": 150, "calories": 48, "proteinGrams": 1, "carbGrams": 11.5, "fatGrams": 0.5 }
+      ]
+    },
+    {
+      "id": "meal_c_2",
+      "name": "Mid-Morning Snack",
+      "type": "midMorning",
+      "time": "10:30",
+      "calories": 200,
+      "proteinGrams": 25,
+      "carbGrams": 20,
+      "fatGrams": 3,
+      "ingredients": [
+        { "name": "Cottage Cheese", "grams": 200, "calories": 143, "proteinGrams": 24, "carbGrams": 5.6, "fatGrams": 2.5 },
+        { "name": "Apple", "grams": 120, "calories": 57, "proteinGrams": 0.3, "carbGrams": 15, "fatGrams": 0.2 }
+      ]
+    },
+    {
+      "id": "meal_c_3",
+      "name": "Lean Lunch",
+      "type": "lunch",
+      "time": "13:00",
+      "calories": 450,
+      "proteinGrams": 50,
+      "carbGrams": 45,
+      "fatGrams": 10,
+      "ingredients": [
+        { "name": "Turkey Breast", "grams": 200, "calories": 220, "proteinGrams": 46, "carbGrams": 0, "fatGrams": 2.5 },
+        { "name": "Basmati Rice", "grams": 100, "calories": 130, "proteinGrams": 2.7, "carbGrams": 28, "fatGrams": 0.3 },
+        { "name": "Spinach", "grams": 100, "calories": 23, "proteinGrams": 2.9, "carbGrams": 3.6, "fatGrams": 0.4 },
+        { "name": "Olive Oil Dressing", "grams": 10, "calories": 88, "proteinGrams": 0, "carbGrams": 0, "fatGrams": 9.9 }
+      ]
+    },
+    {
+      "id": "meal_c_4",
+      "name": "Pre-Workout Fuel",
+      "type": "preWorkout",
+      "time": "16:00",
+      "calories": 250,
+      "proteinGrams": 30,
+      "carbGrams": 30,
+      "fatGrams": 5,
+      "ingredients": [
+        { "name": "Whey Protein", "grams": 30, "calories": 120, "proteinGrams": 24, "carbGrams": 3, "fatGrams": 1.5 },
+        { "name": "Rice Cakes", "grams": 30, "calories": 114, "proteinGrams": 2.1, "carbGrams": 25.7, "fatGrams": 0.6 },
+        { "name": "Watermelon", "grams": 100, "calories": 30, "proteinGrams": 0.6, "carbGrams": 7.6, "fatGrams": 0.2 }
+      ]
+    },
+    {
+      "id": "meal_c_5",
+      "name": "Dinner",
+      "type": "dinner",
+      "time": "19:30",
+      "calories": 500,
+      "proteinGrams": 55,
+      "carbGrams": 45,
+      "fatGrams": 12,
+      "ingredients": [
+        { "name": "White Fish (Tilapia)", "grams": 250, "calories": 290, "proteinGrams": 52, "carbGrams": 0, "fatGrams": 6 },
+        { "name": "Sweet Potato", "grams": 150, "calories": 129, "proteinGrams": 2.4, "carbGrams": 30, "fatGrams": 0.2 },
+        { "name": "Asparagus", "grams": 150, "calories": 34, "proteinGrams": 3.7, "carbGrams": 6.6, "fatGrams": 0.2 },
+        { "name": "Lemon Juice", "grams": 30, "calories": 8, "proteinGrams": 0.1, "carbGrams": 2.6, "fatGrams": 0.1 }
+      ]
+    }
+  ]
+}

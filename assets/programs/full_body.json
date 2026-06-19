@@ -1,0 +1,100 @@
+{
+  "id": "prog_fullbody",
+  "name": "Full Body Beginner",
+  "description": "3-day full body program ideal for beginners. Compound movements with progressive overload. Perfect foundation for anyone new to the gym.",
+  "sport": "gym",
+  "daysPerWeek": 3,
+  "durationWeeks": 6,
+  "level": "beginner",
+  "thumbnailUrl": "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?w=600",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "focus": "Learning the Movements",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Full Body A",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x8", "restSeconds": 150 },
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "3x8", "restSeconds": 120 },
+            { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "3x8", "restSeconds": 120 },
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "2x10", "restSeconds": 90 },
+            { "exerciseId": "ex_018", "exerciseName": "Plank", "setsReps": "3x30s", "restSeconds": 60 }
+          ],
+          "notes": "Use light weight — focus on form"
+        },
+        {
+          "dayNumber": 2,
+          "name": "Rest",
+          "isRestDay": true,
+          "exercises": []
+        },
+        {
+          "dayNumber": 3,
+          "name": "Full Body B",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x8", "restSeconds": 150 },
+            { "exerciseId": "ex_005", "exerciseName": "Barbell Deadlift", "setsReps": "3x5", "restSeconds": 180 },
+            { "exerciseId": "ex_004", "exerciseName": "Pull-ups", "setsReps": "3x5", "restSeconds": 120, "notes": "Assisted if needed" },
+            { "exerciseId": "ex_013", "exerciseName": "Dumbbell Lateral Raises", "setsReps": "3x12", "restSeconds": 60 },
+            { "exerciseId": "ex_019", "exerciseName": "Cable Crunches", "setsReps": "3x15", "restSeconds": 60 }
+          ]
+        },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5,
+          "name": "Full Body C",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_010", "exerciseName": "Leg Press", "setsReps": "3x12", "restSeconds": 120 },
+            { "exerciseId": "ex_021", "exerciseName": "Push-ups", "setsReps": "3x12", "restSeconds": 60 },
+            { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "3x10", "restSeconds": 90 },
+            { "exerciseId": "ex_015", "exerciseName": "Barbell Bicep Curl", "setsReps": "2x12", "restSeconds": 60 },
+            { "exerciseId": "ex_017", "exerciseName": "Tricep Rope Pushdown", "setsReps": "2x12", "restSeconds": 60 },
+            { "exerciseId": "ex_024", "exerciseName": "Calf Raises", "setsReps": "3x20", "restSeconds": 45 }
+          ]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "focus": "Building Habit",
+      "days": [
+        {
+          "dayNumber": 1, "name": "Full Body A", "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x8 (+2.5kg)", "restSeconds": 150 },
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "3x8 (+2.5kg)", "restSeconds": 120 },
+            { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "3x8 (+2.5kg)", "restSeconds": 120 },
+            { "exerciseId": "ex_018", "exerciseName": "Plank", "setsReps": "3x45s", "restSeconds": 60 }
+          ]
+        },
+        { "dayNumber": 2, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 3, "name": "Full Body B", "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "3x8 (+2.5kg)", "restSeconds": 150 },
+            { "exerciseId": "ex_005", "exerciseName": "Barbell Deadlift", "setsReps": "3x5 (+5kg)", "restSeconds": 180 },
+            { "exerciseId": "ex_004", "exerciseName": "Pull-ups", "setsReps": "3x6", "restSeconds": 120 }
+          ]
+        },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5, "name": "Full Body C", "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_010", "exerciseName": "Leg Press", "setsReps": "3x12 (+5kg)", "restSeconds": 120 },
+            { "exerciseId": "ex_021", "exerciseName": "Push-ups", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_007", "exerciseName": "Lat Pulldown", "setsReps": "3x10 (+2.5kg)", "restSeconds": 90 }
+          ]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    }
+  ]
+}

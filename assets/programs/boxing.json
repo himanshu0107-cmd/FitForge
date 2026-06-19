@@ -1,0 +1,73 @@
+{
+  "id": "prog_boxing",
+  "name": "Boxing Fitness",
+  "description": "5-day boxing fitness program combining strength work, bag training, and cardiovascular conditioning. Build power, endurance, and fight-ready conditioning.",
+  "sport": "boxing",
+  "daysPerWeek": 5,
+  "durationWeeks": 8,
+  "level": "intermediate",
+  "thumbnailUrl": "https://images.unsplash.com/photo-1549476464-37392f717541?w=600",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "focus": "Conditioning Base",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Strength & Power",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_001", "exerciseName": "Barbell Bench Press", "setsReps": "4x6", "restSeconds": 120, "notes": "Explosive press" },
+            { "exerciseId": "ex_006", "exerciseName": "Bent-Over Barbell Row", "setsReps": "4x6", "restSeconds": 120 },
+            { "exerciseId": "ex_012", "exerciseName": "Overhead Press", "setsReps": "3x8", "restSeconds": 90 },
+            { "exerciseId": "ex_022", "exerciseName": "Dips", "setsReps": "3x10", "restSeconds": 75 },
+            { "exerciseId": "ex_020", "exerciseName": "Hanging Leg Raises", "setsReps": "3x12", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "name": "Bag Work & Cardio",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_027", "exerciseName": "Jump Rope", "setsReps": "3x3min", "restSeconds": 60, "notes": "Warm-up" },
+            { "exerciseId": "ex_026", "exerciseName": "Burpees", "setsReps": "5x10", "restSeconds": 45, "notes": "Between rounds" },
+            { "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "20min steady", "restSeconds": 0, "notes": "60-70% max HR" },
+            { "exerciseId": "ex_018", "exerciseName": "Plank", "setsReps": "3x60s", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "name": "Lower Body & Core",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_008", "exerciseName": "Barbell Back Squat", "setsReps": "4x8", "restSeconds": 150 },
+            { "exerciseId": "ex_009", "exerciseName": "Romanian Deadlift", "setsReps": "3x10", "restSeconds": 120 },
+            { "exerciseId": "ex_029", "exerciseName": "Box Jumps", "setsReps": "4x6", "restSeconds": 90 },
+            { "exerciseId": "ex_030", "exerciseName": "Kettlebell Swings", "setsReps": "4x20", "restSeconds": 60 },
+            { "exerciseId": "ex_019", "exerciseName": "Cable Crunches", "setsReps": "3x15", "restSeconds": 60 }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "name": "Active Recovery",
+          "isRestDay": true,
+          "exercises": [],
+          "notes": "Light shadow boxing 15min + stretching"
+        },
+        {
+          "dayNumber": 5,
+          "name": "Fight Conditioning",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_027", "exerciseName": "Jump Rope", "setsReps": "5x3min", "restSeconds": 60 },
+            { "exerciseId": "ex_026", "exerciseName": "Burpees", "setsReps": "3x15", "restSeconds": 60 },
+            { "exerciseId": "ex_021", "exerciseName": "Push-ups", "setsReps": "5x20", "restSeconds": 45 },
+            { "exerciseId": "ex_018", "exerciseName": "Plank", "setsReps": "3x90s", "restSeconds": 60 }
+          ]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    }
+  ]
+}

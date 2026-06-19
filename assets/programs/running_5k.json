@@ -1,0 +1,109 @@
+{
+  "id": "prog_5k",
+  "name": "5K Running Plan",
+  "description": "Progressive 8-week plan to build from beginner runner to 5K completion. Uses run/walk intervals progressing to continuous running. Perfect for beginners.",
+  "sport": "running",
+  "daysPerWeek": 3,
+  "durationWeeks": 8,
+  "level": "beginner",
+  "thumbnailUrl": "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=600",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "focus": "Run/Walk Introduction",
+      "days": [
+        {
+          "dayNumber": 1,
+          "name": "Run Day 1",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 1min / Walk 2min × 6", "restSeconds": 0, "notes": "Total ~18min. Easy conversational pace." }
+          ]
+        },
+        { "dayNumber": 2, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 3,
+          "name": "Run Day 2",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 1min / Walk 2min × 6", "restSeconds": 0, "notes": "Same as Day 1" }
+          ]
+        },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5,
+          "name": "Run Day 3",
+          "isRestDay": false,
+          "exercises": [
+            { "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 1.5min / Walk 1.5min × 6", "restSeconds": 0, "notes": "Slightly more running" }
+          ]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "focus": "Extending Run Intervals",
+      "days": [
+        {
+          "dayNumber": 1, "name": "Run Day 1", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 2min / Walk 1min × 7", "restSeconds": 0 }]
+        },
+        { "dayNumber": 2, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 3, "name": "Run Day 2", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 2min / Walk 1min × 7", "restSeconds": 0 }]
+        },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5, "name": "Run Day 3", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 3min / Walk 1min × 5", "restSeconds": 0 }]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    },
+    {
+      "weekNumber": 5,
+      "focus": "Long Continuous Runs",
+      "days": [
+        {
+          "dayNumber": 1, "name": "Run Day 1", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 20min continuous", "restSeconds": 0, "notes": "First continuous 20-min run!" }]
+        },
+        { "dayNumber": 2, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 3, "name": "Run Day 2", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 22min continuous", "restSeconds": 0 }]
+        },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5, "name": "Run Day 3", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "Run 25min continuous", "restSeconds": 0 }]
+        },
+        { "dayNumber": 6, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    },
+    {
+      "weekNumber": 8,
+      "focus": "Race Week — 5K!",
+      "days": [
+        {
+          "dayNumber": 1, "name": "Easy Run", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "Treadmill Running", "setsReps": "20min easy", "restSeconds": 0, "notes": "Taper — keep it easy" }]
+        },
+        { "dayNumber": 2, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 3, "name": "Rest", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 4, "name": "Rest", "isRestDay": true, "exercises": [] },
+        {
+          "dayNumber": 5, "name": "5K Race Day! 🏅", "isRestDay": false,
+          "exercises": [{ "exerciseId": "ex_025", "exerciseName": "5K Race", "setsReps": "5K continuous", "restSeconds": 0, "notes": "You've got this! Run your best 5K." }]
+        },
+        { "dayNumber": 6, "name": "Rest & Celebrate 🎉", "isRestDay": true, "exercises": [] },
+        { "dayNumber": 7, "name": "Rest", "isRestDay": true, "exercises": [] }
+      ]
+    }
+  ]
+}
