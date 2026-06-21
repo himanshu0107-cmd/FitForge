@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
-import 'package:fitforge/data/local/database.dart';
+import 'package:fitforge/data/local/database.dart' as db;
+import 'package:drift/drift.dart' hide Column;
 import 'package:fitforge/domain/models/user_profile.dart';
 import 'package:fitforge/domain/models/exercise.dart';
 import 'package:fitforge/domain/models/workout.dart';
@@ -21,10 +23,10 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize in main with override');
 });
 
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase();
-  ref.onDispose(db.close);
-  return db;
+final appDatabaseProvider = Provider<db.AppDatabase>((ref) {
+  final database = db.AppDatabase();
+  ref.onDispose(database.close);
+  return database;
 });
 
 // ─────────────────────────────────────────
@@ -32,7 +34,7 @@ final appDatabaseProvider = Provider<AppDatabase>((ref) {
 // ─────────────────────────────────────────
 
 class UserProfileNotifier extends StateNotifier<AsyncValue<UserProfile?>> {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
   final SharedPreferences _prefs;
 
   UserProfileNotifier(this._db, this._prefs) : super(const AsyncValue.loading()) {
@@ -56,7 +58,7 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<UserProfile?>> {
   Future<void> saveProfile(UserProfile profile) async {
     try {
       await _db.into(_db.userProfiles).insertOnConflictUpdate(
-            UserProfilesCompanion.insert(
+            db.UserProfilesCompanion.insert(
               id: profile.id,
               name: profile.name,
               age: profile.age,
@@ -79,7 +81,7 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<UserProfile?>> {
     }
   }
 
-  UserProfile _rowToProfile(UserProfilesData row) => UserProfile(
+  UserProfile _rowToProfile(db.UserProfile row) => UserProfile(
         id: row.id,
         name: row.name,
         age: row.age,
@@ -117,10 +119,10 @@ final isOnboardingCompleteProvider = Provider<bool>((ref) {
 // ─────────────────────────────────────────
 
 final exercisesProvider = FutureProvider<List<Exercise>>((ref) async {
-  final db = ref.watch(appDatabaseProvider);
+  final database = ref.watch(appDatabaseProvider);
 
   // Load from DB first
-  final dbRows = await db.select(db.exercisesTable).get();
+  final dbRows = await database.select(database.exercisesTable).get();
   if (dbRows.isNotEmpty) {
     return dbRows.map(_exerciseRowToModel).toList();
   }
@@ -133,8 +135,8 @@ final exercisesProvider = FutureProvider<List<Exercise>>((ref) async {
       .toList();
 
   for (final ex in exercises) {
-    await db.into(db.exercisesTable).insertOnConflictUpdate(
-          ExercisesTableCompanion.insert(
+    await database.into(database.exercisesTable).insertOnConflictUpdate(
+          db.ExercisesTableCompanion.insert(
             id: ex.id,
             name: ex.name,
             description: ex.description,
@@ -150,7 +152,7 @@ final exercisesProvider = FutureProvider<List<Exercise>>((ref) async {
   return exercises;
 });
 
-Exercise _exerciseRowToModel(ExercisesTableData row) {
+Exercise _exerciseRowToModel(db.ExercisesTableData row) {
   final secondaryList =
       (jsonDecode(row.secondaryMuscles) as List<dynamic>).map((m) {
     return MuscleGroup.values.firstWhere(
@@ -184,7 +186,7 @@ Exercise _exerciseRowToModel(ExercisesTableData row) {
 // ─────────────────────────────────────────
 
 class WorkoutSessionNotifier extends StateNotifier<WorkoutSession?> {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   WorkoutSessionNotifier(this._db) : super(null);
 
@@ -219,7 +221,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSession?> {
     );
 
     await _db.into(_db.workoutSessions).insertOnConflictUpdate(
-          WorkoutSessionsCompanion.insert(
+          db.WorkoutSessionsCompanion.insert(
             id: completed.id,
             workoutPlanId: completed.workoutPlanId,
             workoutName: completed.workoutName,
@@ -227,7 +229,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSession?> {
             exerciseLogs: jsonEncode(
               completed.exerciseLogs.map((l) => l.toJson()).toList(),
             ),
-            isCompleted: true,
+            isCompleted: const Value(true),
           ),
         );
 
@@ -248,7 +250,7 @@ final workoutSessionNotifierProvider =
 // ─────────────────────────────────────────
 
 class FoodLogNotifier extends StateNotifier<AsyncValue<List<FoodEntry>>> {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   FoodLogNotifier(this._db) : super(const AsyncValue.loading()) {
     _loadToday();
@@ -270,7 +272,7 @@ class FoodLogNotifier extends StateNotifier<AsyncValue<List<FoodEntry>>> {
     }
   }
 
-  FoodEntry _rowToEntry(FoodLogsData row) => FoodEntry(
+  FoodEntry _rowToEntry(db.FoodLog row) => FoodEntry(
         id: row.id,
         foodName: row.foodName,
         grams: row.grams,
@@ -283,7 +285,7 @@ class FoodLogNotifier extends StateNotifier<AsyncValue<List<FoodEntry>>> {
       );
 
   Future<void> logFood(FoodEntry entry) async {
-    await _db.into(_db.foodLogs).insert(FoodLogsCompanion.insert(
+    await _db.into(_db.foodLogs).insert(db.FoodLogsCompanion.insert(
           id: entry.id,
           foodName: entry.foodName,
           grams: entry.grams,
@@ -311,7 +313,7 @@ final foodLogProvider =
 final todayCaloriesProvider = Provider<int>((ref) {
   final foodLog = ref.watch(foodLogProvider);
   return foodLog.maybeWhen(
-    data: (entries) => entries.fold(0, (sum, e) => sum + e.calories),
+    data: (entries) => entries.fold<int>(0, (sum, e) => sum + e.calories),
     orElse: () => 0,
   );
 });
@@ -321,7 +323,7 @@ final todayCaloriesProvider = Provider<int>((ref) {
 // ─────────────────────────────────────────
 
 class WeightLogNotifier extends StateNotifier<AsyncValue<List<WeightLog>>> {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   WeightLogNotifier(this._db) : super(const AsyncValue.loading()) {
     load();
@@ -339,7 +341,7 @@ class WeightLogNotifier extends StateNotifier<AsyncValue<List<WeightLog>>> {
     }
   }
 
-  WeightLog _rowToLog(WeightLogsData row) => WeightLog(
+  WeightLog _rowToLog(db.WeightLog row) => WeightLog(
         id: row.id,
         weightKg: row.weightKg,
         loggedAt: row.loggedAt,
@@ -347,7 +349,7 @@ class WeightLogNotifier extends StateNotifier<AsyncValue<List<WeightLog>>> {
       );
 
   Future<void> addEntry(double weightKg) async {
-    await _db.into(_db.weightLogs).insert(WeightLogsCompanion.insert(
+    await _db.into(_db.weightLogs).insert(db.WeightLogsCompanion.insert(
           id: _uuid.v4(),
           weightKg: weightKg,
           loggedAt: DateTime.now(),

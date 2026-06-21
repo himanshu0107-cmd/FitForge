@@ -29,10 +29,22 @@ class TimerHubScreen extends StatelessWidget {
           bottom: TabBar(
             indicatorColor: AppColors.primary,
             tabs: [
-              Tab(child: Text('Rest', style: GoogleFonts.rajdhani(fontSize: 13, fontWeight: FontWeight.w600))),
-              Tab(child: Text('HIIT', style: GoogleFonts.rajdhani(fontSize: 13, fontWeight: FontWeight.w600))),
-              Tab(child: Text('Tabata', style: GoogleFonts.rajdhani(fontSize: 13, fontWeight: FontWeight.w600))),
-              Tab(child: Text('Stopwatch', style: GoogleFonts.rajdhani(fontSize: 13, fontWeight: FontWeight.w600))),
+              Tab(
+                  child: Text('Rest',
+                      style: GoogleFonts.rajdhani(
+                          fontSize: 13, fontWeight: FontWeight.w600))),
+              Tab(
+                  child: Text('HIIT',
+                      style: GoogleFonts.rajdhani(
+                          fontSize: 13, fontWeight: FontWeight.w600))),
+              Tab(
+                  child: Text('Tabata',
+                      style: GoogleFonts.rajdhani(
+                          fontSize: 13, fontWeight: FontWeight.w600))),
+              Tab(
+                  child: Text('Stopwatch',
+                      style: GoogleFonts.rajdhani(
+                          fontSize: 13, fontWeight: FontWeight.w600))),
             ],
           ),
         ),
@@ -137,14 +149,16 @@ class _RestTimerTabState extends State<RestTimerTab> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
                   margin: const EdgeInsets.symmetric(horizontal: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     color: isActive
-                        ? AppColors.primary.withOpacity(0.2)
+                        ? AppColors.primary.withValues(alpha: 0.2)
                         : AppColors.darkCard,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: isActive ? AppColors.primary : AppColors.darkBorder,
+                      color:
+                          isActive ? AppColors.primary : AppColors.darkBorder,
                       width: isActive ? 2 : 1,
                     ),
                   ),
@@ -153,7 +167,9 @@ class _RestTimerTabState extends State<RestTimerTab> {
                     style: GoogleFonts.rajdhani(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: isActive ? AppColors.primary : AppColors.textSecondary,
+                      color: isActive
+                          ? AppColors.primary
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ),
@@ -230,7 +246,8 @@ class _RestTimerTabState extends State<RestTimerTab> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: _reset,
-                  child: Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
+                  child:
+                      Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -241,7 +258,9 @@ class _RestTimerTabState extends State<RestTimerTab> {
                   child: ElevatedButton(
                     onPressed: _running ? _pause : _start,
                     child: Text(
-                      _running ? 'Pause' : (_remaining == _total ? 'Start' : 'Resume'),
+                      _running
+                          ? 'Pause'
+                          : (_remaining == _total ? 'Start' : 'Resume'),
                       style: GoogleFonts.rajdhani(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),
@@ -395,7 +414,7 @@ class _HiitTimerTabState extends State<HiitTimerTab> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
             decoration: BoxDecoration(
               color: (_isWork ? AppColors.timerWork : AppColors.timerRest)
-                  .withOpacity(0.2),
+                  .withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Text(
@@ -445,7 +464,8 @@ class _HiitTimerTabState extends State<HiitTimerTab> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: _reset,
-                  child: Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
+                  child:
+                      Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -460,12 +480,15 @@ class _HiitTimerTabState extends State<HiitTimerTab> {
                             ? _pause
                             : _resume,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isWork
-                          ? AppColors.timerWork
-                          : AppColors.timerRest,
+                      backgroundColor:
+                          _isWork ? AppColors.timerWork : AppColors.timerRest,
                     ),
                     child: Text(
-                      _running ? 'Pause' : (!_running && _currentRound > 1 ? 'Resume' : 'Start'),
+                      _running
+                          ? 'Pause'
+                          : (!_running && _currentRound > 1
+                              ? 'Resume'
+                              : 'Start'),
                       style: GoogleFonts.rajdhani(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),
@@ -485,14 +508,16 @@ class _HiitField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final bool enabled;
-  const _HiitField({required this.controller, required this.label, required this.enabled});
+  const _HiitField(
+      {required this.controller, required this.label, required this.enabled});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: GoogleFonts.inter(fontSize: 11, color: AppColors.textMuted)),
+        Text(label,
+            style: GoogleFonts.inter(fontSize: 11, color: AppColors.textMuted)),
         const SizedBox(height: 4),
         TextField(
           controller: controller,
@@ -615,22 +640,36 @@ class _TabataTimerTabState extends State<TabataTimerTab> {
               _TabataSetting(
                 label: 'Work',
                 value: '${_workSec}s',
-                onInc: !_running ? () => setState(() { _workSec += 5; _remaining = _workSec; }) : null,
-                onDec: !_running && _workSec > 5 ? () => setState(() { _workSec -= 5; _remaining = _workSec; }) : null,
+                onInc: !_running
+                    ? () => setState(() {
+                          _workSec += 5;
+                          _remaining = _workSec;
+                        })
+                    : null,
+                onDec: !_running && _workSec > 5
+                    ? () => setState(() {
+                          _workSec -= 5;
+                          _remaining = _workSec;
+                        })
+                    : null,
               ),
               const SizedBox(width: 16),
               _TabataSetting(
                 label: 'Rest',
                 value: '${_restSec}s',
                 onInc: !_running ? () => setState(() => _restSec += 5) : null,
-                onDec: !_running && _restSec > 5 ? () => setState(() => _restSec -= 5) : null,
+                onDec: !_running && _restSec > 5
+                    ? () => setState(() => _restSec -= 5)
+                    : null,
               ),
               const SizedBox(width: 16),
               _TabataSetting(
                 label: 'Rounds',
                 value: '$_totalRounds',
                 onInc: !_running ? () => setState(() => _totalRounds++) : null,
-                onDec: !_running && _totalRounds > 1 ? () => setState(() => _totalRounds--) : null,
+                onDec: !_running && _totalRounds > 1
+                    ? () => setState(() => _totalRounds--)
+                    : null,
               ),
             ],
           ),
@@ -662,8 +701,14 @@ class _TabataTimerTabState extends State<TabataTimerTab> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: _isWork
-                    ? [AppColors.timerWork.withOpacity(0.3), AppColors.timerWork.withOpacity(0.1)]
-                    : [AppColors.timerRest.withOpacity(0.3), AppColors.timerRest.withOpacity(0.1)],
+                    ? [
+                        AppColors.timerWork.withValues(alpha: 0.3),
+                        AppColors.timerWork.withValues(alpha: 0.1)
+                      ]
+                    : [
+                        AppColors.timerRest.withValues(alpha: 0.3),
+                        AppColors.timerRest.withValues(alpha: 0.1)
+                      ],
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
@@ -699,7 +744,8 @@ class _TabataTimerTabState extends State<TabataTimerTab> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: _reset,
-                  child: Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
+                  child:
+                      Text('Reset', style: GoogleFonts.rajdhani(fontSize: 15)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -710,7 +756,8 @@ class _TabataTimerTabState extends State<TabataTimerTab> {
                   child: ElevatedButton(
                     onPressed: _running ? _pause : _start,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isWork ? AppColors.timerWork : AppColors.timerRest,
+                      backgroundColor:
+                          _isWork ? AppColors.timerWork : AppColors.timerRest,
                     ),
                     child: Text(
                       _running ? 'Pause' : 'Start',
@@ -754,7 +801,8 @@ class _TabataSetting extends StatelessWidget {
             GestureDetector(
               onTap: onDec,
               child: Icon(Icons.remove_circle_outline,
-                  color: onDec != null ? AppColors.primary : AppColors.textMuted,
+                  color:
+                      onDec != null ? AppColors.primary : AppColors.textMuted,
                   size: 20),
             ),
             Padding(
@@ -771,7 +819,8 @@ class _TabataSetting extends StatelessWidget {
             GestureDetector(
               onTap: onInc,
               child: Icon(Icons.add_circle_outline,
-                  color: onInc != null ? AppColors.primary : AppColors.textMuted,
+                  color:
+                      onInc != null ? AppColors.primary : AppColors.textMuted,
                   size: 20),
             ),
           ],
@@ -829,7 +878,8 @@ class _StopwatchTabState extends State<StopwatchTab> {
   String _format(Duration d) {
     final mins = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final secs = d.inSeconds.remainder(60).toString().padLeft(2, '0');
-    final ms = (d.inMilliseconds.remainder(1000) ~/ 10).toString().padLeft(2, '0');
+    final ms =
+        (d.inMilliseconds.remainder(1000) ~/ 10).toString().padLeft(2, '0');
     return '$mins:$secs.$ms';
   }
 
@@ -910,7 +960,9 @@ class _StopwatchTabState extends State<StopwatchTab> {
                           style: GoogleFonts.rajdhani(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: i == 0 ? AppColors.primary : AppColors.textSecondary,
+                            color: i == 0
+                                ? AppColors.primary
+                                : AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -953,7 +1005,9 @@ class _CircleBtn extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: onTap != null ? color.withOpacity(0.2) : AppColors.darkSurface,
+          color: onTap != null
+              ? color.withValues(alpha: 0.2)
+              : AppColors.darkSurface,
           border: Border.all(
             color: onTap != null ? color : AppColors.darkBorder,
             width: 2,

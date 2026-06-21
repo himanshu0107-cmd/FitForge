@@ -48,9 +48,8 @@ class WorkoutSummaryScreen extends ConsumerWidget {
     final exercisesCompleted = s.exerciseLogs.where((e) => !e.isSkipped).length;
 
     // Detect PRs (simplified: exercises with at least 1 set logged)
-    final newPRs = s.exerciseLogs
-        .where((e) => e.sets.any((set) => set.isPR))
-        .toList();
+    final newPRs =
+        s.exerciseLogs.where((e) => e.sets.any((set) => set.isPR)).toList();
 
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
@@ -164,7 +163,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.4),
+                color: AppColors.primary.withValues(alpha: 0.4),
                 blurRadius: 30,
                 spreadRadius: 5,
               ),
@@ -226,7 +225,7 @@ class _StatCard extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -270,12 +269,12 @@ class _PRSection extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.warning.withOpacity(0.15),
-            AppColors.accent.withOpacity(0.1),
+            AppColors.warning.withValues(alpha: 0.15),
+            AppColors.accent.withValues(alpha: 0.1),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+        border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,9 +389,10 @@ class _ExerciseSummaryRow extends StatelessWidget {
               ),
               if (log.isSkipped)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.error.withOpacity(0.15),
+                    color: AppColors.error.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -420,7 +420,8 @@ class _ExerciseSummaryRow extends StatelessWidget {
               children: log.sets.take(5).map((set) {
                 return Container(
                   margin: const EdgeInsets.only(right: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: AppColors.darkSurface,
                     borderRadius: BorderRadius.circular(6),

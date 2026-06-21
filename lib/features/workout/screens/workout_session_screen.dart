@@ -47,13 +47,11 @@ class WorkoutSessionState {
     bool? isComplete,
   }) {
     return WorkoutSessionState(
-      currentExerciseIndex:
-          currentExerciseIndex ?? this.currentExerciseIndex,
+      currentExerciseIndex: currentExerciseIndex ?? this.currentExerciseIndex,
       currentSetIndex: currentSetIndex ?? this.currentSetIndex,
       setLogs: setLogs ?? this.setLogs,
       isResting: isResting ?? this.isResting,
-      restSecondsRemaining:
-          restSecondsRemaining ?? this.restSecondsRemaining,
+      restSecondsRemaining: restSecondsRemaining ?? this.restSecondsRemaining,
       restSecondsTotal: restSecondsTotal ?? this.restSecondsTotal,
       startTime: startTime ?? this.startTime,
       isComplete: isComplete ?? this.isComplete,
@@ -61,16 +59,14 @@ class WorkoutSessionState {
   }
 }
 
-class WorkoutStateNotifier
-    extends StateNotifier<WorkoutSessionState> {
+class WorkoutStateNotifier extends StateNotifier<WorkoutSessionState> {
   final List<PlannedExercise> exercises;
   Timer? _restTimer;
 
   WorkoutStateNotifier(this.exercises)
       : super(WorkoutSessionState(startTime: DateTime.now()));
 
-  PlannedExercise get currentExercise =>
-      exercises[state.currentExerciseIndex];
+  PlannedExercise get currentExercise => exercises[state.currentExerciseIndex];
 
   void completeSet(int reps, double weightKg) {
     final ex = currentExercise;
@@ -215,8 +211,7 @@ class WorkoutSessionScreen extends ConsumerStatefulWidget {
       _WorkoutSessionScreenState();
 }
 
-class _WorkoutSessionScreenState
-    extends ConsumerState<WorkoutSessionScreen> {
+class _WorkoutSessionScreenState extends ConsumerState<WorkoutSessionScreen> {
   final _repsController = TextEditingController(text: '10');
   final _weightController = TextEditingController(text: '60');
 
@@ -241,10 +236,8 @@ class _WorkoutSessionScreenState
       );
     }
 
-    final state =
-        ref.watch(workoutStateProvider(widget.exercises));
-    final notifier =
-        ref.read(workoutStateProvider(widget.exercises).notifier);
+    final state = ref.watch(workoutStateProvider(widget.exercises));
+    final notifier = ref.read(workoutStateProvider(widget.exercises).notifier);
 
     // Watch for completion
     if (state.isComplete) {
@@ -266,9 +259,10 @@ class _WorkoutSessionScreenState
               ? _RestTimerView(
                   state: state,
                   notifier: notifier,
-                  nextExercise: state.currentExerciseIndex < widget.exercises.length
-                      ? widget.exercises[state.currentExerciseIndex]
-                      : null,
+                  nextExercise:
+                      state.currentExerciseIndex < widget.exercises.length
+                          ? widget.exercises[state.currentExerciseIndex]
+                          : null,
                 )
               : _ExerciseView(
                   exercise: ex,
@@ -276,18 +270,15 @@ class _WorkoutSessionScreenState
                   repsController: _repsController,
                   weightController: _weightController,
                   onCompleteSet: () {
-                    final reps =
-                        int.tryParse(_repsController.text) ?? 10;
-                    final weight =
-                        double.tryParse(_weightController.text) ?? 0;
+                    final reps = int.tryParse(_repsController.text) ?? 10;
+                    final weight = double.tryParse(_weightController.text) ?? 0;
                     notifier.completeSet(reps, weight);
                   },
                   onSkipSet: notifier.skipSet,
                   onSkipExercise: notifier.skipExercise,
                   nextExercise:
                       state.currentExerciseIndex + 1 < widget.exercises.length
-                          ? widget.exercises[
-                              state.currentExerciseIndex + 1]
+                          ? widget.exercises[state.currentExerciseIndex + 1]
                           : null,
                 ),
     );
@@ -361,8 +352,7 @@ class _WorkoutSessionScreenState
           ElevatedButton(
             onPressed: () {
               Navigator.pop(ctx);
-              _handleComplete(
-                  ref.read(workoutStateProvider(widget.exercises)));
+              _handleComplete(ref.read(workoutStateProvider(widget.exercises)));
             },
             child: const Text('End'),
           ),
@@ -420,8 +410,7 @@ class _ExerciseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completedSets =
-        state.setLogs[exercise.exerciseId]?.length ?? 0;
+    final completedSets = state.setLogs[exercise.exerciseId]?.length ?? 0;
     final totalSets = exercise.sets;
 
     return Column(
@@ -457,13 +446,14 @@ class _ExerciseView extends StatelessWidget {
                     return Expanded(
                       child: Container(
                         height: 8,
-                        margin: EdgeInsets.only(right: i < totalSets - 1 ? 6 : 0),
+                        margin:
+                            EdgeInsets.only(right: i < totalSets - 1 ? 6 : 0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           color: isDone
                               ? AppColors.primary
                               : isCurrent
-                                  ? AppColors.primary.withOpacity(0.4)
+                                  ? AppColors.primary.withValues(alpha: 0.4)
                                   : AppColors.darkSurface,
                         ),
                       ),
@@ -488,7 +478,7 @@ class _ExerciseView extends StatelessWidget {
                         color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 10),
-                  ...( state.setLogs[exercise.exerciseId] ?? [])
+                  ...(state.setLogs[exercise.exerciseId] ?? [])
                       .map((set) => Container(
                             margin: const EdgeInsets.only(bottom: 6),
                             padding: const EdgeInsets.symmetric(
@@ -497,7 +487,8 @@ class _ExerciseView extends StatelessWidget {
                               color: AppColors.darkCard,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: AppColors.success.withOpacity(0.4)),
+                                  color:
+                                      AppColors.success.withValues(alpha: 0.4)),
                             ),
                             child: Row(
                               children: [
@@ -531,7 +522,8 @@ class _ExerciseView extends StatelessWidget {
                     color: AppColors.darkCard,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                        color: AppColors.primary.withOpacity(0.4), width: 1.5),
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        width: 1.5),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -588,7 +580,9 @@ class _ExerciseView extends StatelessWidget {
                 const Icon(Icons.arrow_forward,
                     color: AppColors.textMuted, size: 16),
                 const SizedBox(width: 8),
-                Text('Next: ', style: GoogleFonts.inter(fontSize: 12, color: AppColors.textMuted)),
+                Text('Next: ',
+                    style: GoogleFonts.inter(
+                        fontSize: 12, color: AppColors.textMuted)),
                 Text(nextExercise!.exerciseName,
                     style: GoogleFonts.rajdhani(
                       fontSize: 14,
@@ -746,9 +740,7 @@ class _RestTimerView extends StatelessWidget {
                   value: progress.toDouble(),
                   strokeWidth: 10,
                   backgroundColor: AppColors.darkSurface,
-                  color: progress > 0.3
-                      ? AppColors.primary
-                      : AppColors.warning,
+                  color: progress > 0.3 ? AppColors.primary : AppColors.warning,
                   strokeCap: StrokeCap.round,
                 ),
               ),
@@ -802,7 +794,8 @@ class _RestTimerView extends StatelessWidget {
           if (nextExercise != null) ...[
             Text(
               'Next up',
-              style: GoogleFonts.inter(fontSize: 12, color: AppColors.textMuted),
+              style:
+                  GoogleFonts.inter(fontSize: 12, color: AppColors.textMuted),
             ),
             const SizedBox(height: 4),
             Text(

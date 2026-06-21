@@ -129,7 +129,7 @@ class _DietScreenState extends ConsumerState<DietScreen>
                             horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.primary.withOpacity(0.2)
+                              ? AppColors.primary.withValues(alpha: 0.2)
                               : AppColors.darkSurface,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
@@ -153,23 +153,51 @@ class _DietScreenState extends ConsumerState<DietScreen>
                 ),
 
                 const SizedBox(height: 16),
-                _DialogField(ctrl: nameCtrl, label: 'Food Name', hint: 'e.g. Chicken Breast'),
+                _DialogField(
+                    ctrl: nameCtrl,
+                    label: 'Food Name',
+                    hint: 'e.g. Chicken Breast'),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Expanded(child: _DialogField(ctrl: gramsCtrl, label: 'Grams', hint: '100', isNumber: true)),
+                    Expanded(
+                        child: _DialogField(
+                            ctrl: gramsCtrl,
+                            label: 'Grams',
+                            hint: '100',
+                            isNumber: true)),
                     const SizedBox(width: 12),
-                    Expanded(child: _DialogField(ctrl: calCtrl, label: 'Calories', hint: '0', isNumber: true)),
+                    Expanded(
+                        child: _DialogField(
+                            ctrl: calCtrl,
+                            label: 'Calories',
+                            hint: '0',
+                            isNumber: true)),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Expanded(child: _DialogField(ctrl: proteinCtrl, label: 'Protein (g)', hint: '0', isNumber: true)),
+                    Expanded(
+                        child: _DialogField(
+                            ctrl: proteinCtrl,
+                            label: 'Protein (g)',
+                            hint: '0',
+                            isNumber: true)),
                     const SizedBox(width: 8),
-                    Expanded(child: _DialogField(ctrl: carbCtrl, label: 'Carbs (g)', hint: '0', isNumber: true)),
+                    Expanded(
+                        child: _DialogField(
+                            ctrl: carbCtrl,
+                            label: 'Carbs (g)',
+                            hint: '0',
+                            isNumber: true)),
                     const SizedBox(width: 8),
-                    Expanded(child: _DialogField(ctrl: fatCtrl, label: 'Fat (g)', hint: '0', isNumber: true)),
+                    Expanded(
+                        child: _DialogField(
+                            ctrl: fatCtrl,
+                            label: 'Fat (g)',
+                            hint: '0',
+                            isNumber: true)),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -185,7 +213,8 @@ class _DietScreenState extends ConsumerState<DietScreen>
                               foodName: nameCtrl.text.trim(),
                               grams: double.tryParse(gramsCtrl.text) ?? 100,
                               calories: int.tryParse(calCtrl.text) ?? 0,
-                              proteinGrams: double.tryParse(proteinCtrl.text) ?? 0,
+                              proteinGrams:
+                                  double.tryParse(proteinCtrl.text) ?? 0,
                               carbGrams: double.tryParse(carbCtrl.text) ?? 0,
                               fatGrams: double.tryParse(fatCtrl.text) ?? 0,
                               mealType: selectedType,
@@ -268,20 +297,42 @@ class _TodayTab extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: LinearProgressIndicator(
-                      value: calGoal > 0 ? (totalCal / calGoal).clamp(0.0, 1.0) : 0,
+                      value: calGoal > 0
+                          ? (totalCal / calGoal).clamp(0.0, 1.0)
+                          : 0,
                       backgroundColor: AppColors.darkSurface,
-                      color: totalCal > calGoal ? AppColors.error : AppColors.primary,
+                      color: totalCal > calGoal
+                          ? AppColors.error
+                          : AppColors.primary,
                       minHeight: 8,
                     ),
                   ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
-                      Expanded(child: _MacroBar(label: 'Protein', eaten: totalProtein.round(), goal: proteinGoal, unit: 'g', color: AppColors.info)),
+                      Expanded(
+                          child: _MacroBar(
+                              label: 'Protein',
+                              eaten: totalProtein.round(),
+                              goal: proteinGoal,
+                              unit: 'g',
+                              color: AppColors.info)),
                       const SizedBox(width: 12),
-                      Expanded(child: _MacroBar(label: 'Carbs', eaten: totalCarbs.round(), goal: carbGoal, unit: 'g', color: AppColors.warning)),
+                      Expanded(
+                          child: _MacroBar(
+                              label: 'Carbs',
+                              eaten: totalCarbs.round(),
+                              goal: carbGoal,
+                              unit: 'g',
+                              color: AppColors.warning)),
                       const SizedBox(width: 12),
-                      Expanded(child: _MacroBar(label: 'Fat', eaten: totalFat.round(), goal: fatGoal, unit: 'g', color: AppColors.accent)),
+                      Expanded(
+                          child: _MacroBar(
+                              label: 'Fat',
+                              eaten: totalFat.round(),
+                              goal: fatGoal,
+                              unit: 'g',
+                              color: AppColors.accent)),
                     ],
                   ),
                 ],
@@ -306,8 +357,7 @@ class _TodayTab extends StatelessWidget {
       },
       loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary)),
-      error: (e, _) =>
-          Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }
@@ -334,8 +384,7 @@ class _MacroBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: GoogleFonts.inter(
-                fontSize: 11, color: AppColors.textMuted)),
+            style: GoogleFonts.inter(fontSize: 11, color: AppColors.textMuted)),
         const SizedBox(height: 4),
         ClipRRect(
           borderRadius: BorderRadius.circular(3),
@@ -411,14 +460,15 @@ class _MealGroup extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(right: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.error.withOpacity(0.2),
+                  color: AppColors.error.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.delete_outline, color: AppColors.error),
               ),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
                   color: AppColors.darkCard,
                   borderRadius: BorderRadius.circular(12),
@@ -511,8 +561,7 @@ class _MealPlansTab extends ConsumerWidget {
       ),
       loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary)),
-      error: (e, _) =>
-          Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }
@@ -561,11 +610,13 @@ class _MealPlanCardState extends State<_MealPlanCard> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: _typeColor.withOpacity(0.15),
+                          color: _typeColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: _typeColor.withOpacity(0.3)),
+                          border: Border.all(
+                              color: _typeColor.withValues(alpha: 0.3)),
                         ),
                         child: Text(
                           plan.type.displayName.toUpperCase(),
@@ -598,20 +649,31 @@ class _MealPlanCardState extends State<_MealPlanCard> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      _MiniMacro(label: 'Cal', value: '${plan.totalCalories}', color: AppColors.primary),
+                      _MiniMacro(
+                          label: 'Cal',
+                          value: '${plan.totalCalories}',
+                          color: AppColors.primary),
                       const SizedBox(width: 12),
-                      _MiniMacro(label: 'Protein', value: '${plan.proteinGrams}g', color: AppColors.info),
+                      _MiniMacro(
+                          label: 'Protein',
+                          value: '${plan.proteinGrams}g',
+                          color: AppColors.info),
                       const SizedBox(width: 12),
-                      _MiniMacro(label: 'Carbs', value: '${plan.carbGrams}g', color: AppColors.warning),
+                      _MiniMacro(
+                          label: 'Carbs',
+                          value: '${plan.carbGrams}g',
+                          color: AppColors.warning),
                       const SizedBox(width: 12),
-                      _MiniMacro(label: 'Fat', value: '${plan.fatGrams}g', color: AppColors.accent),
+                      _MiniMacro(
+                          label: 'Fat',
+                          value: '${plan.fatGrams}g',
+                          color: AppColors.accent),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-
           if (_expanded) ...[
             const Divider(height: 1, color: AppColors.darkBorder),
             ...plan.meals.map((meal) => _MealRow(meal: meal)),
@@ -626,7 +688,8 @@ class _MiniMacro extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
-  const _MiniMacro({required this.label, required this.value, required this.color});
+  const _MiniMacro(
+      {required this.label, required this.value, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -670,7 +733,9 @@ class _MealRow extends StatelessWidget {
               Text(
                 '${meal.calories} kcal',
                 style: GoogleFonts.rajdhani(
-                    fontSize: 14, color: AppColors.primary, fontWeight: FontWeight.w700),
+                    fontSize: 14,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -728,8 +793,7 @@ class _MacrosTab extends StatelessWidget {
       },
       loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary)),
-      error: (e, _) =>
-          Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }
@@ -772,8 +836,10 @@ class _TdeeCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _TdeeMetric(label: 'BMR', value: '${tdee.bmr}', unit: 'kcal'),
-              _TdeeMetric(label: 'Protein', value: '${tdee.proteinGrams}', unit: 'g'),
-              _TdeeMetric(label: 'Carbs', value: '${tdee.carbGrams}', unit: 'g'),
+              _TdeeMetric(
+                  label: 'Protein', value: '${tdee.proteinGrams}', unit: 'g'),
+              _TdeeMetric(
+                  label: 'Carbs', value: '${tdee.carbGrams}', unit: 'g'),
               _TdeeMetric(label: 'Fat', value: '${tdee.fatGrams}', unit: 'g'),
             ],
           ),
@@ -787,7 +853,8 @@ class _TdeeMetric extends StatelessWidget {
   final String label;
   final String value;
   final String unit;
-  const _TdeeMetric({required this.label, required this.value, required this.unit});
+  const _TdeeMetric(
+      {required this.label, required this.value, required this.unit});
 
   @override
   Widget build(BuildContext context) {
@@ -1020,8 +1087,7 @@ class _DialogField extends StatelessWidget {
         TextField(
           controller: ctrl,
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-          style: GoogleFonts.inter(
-              color: AppColors.textPrimary, fontSize: 14),
+          style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 14),
           decoration: InputDecoration(hintText: hint),
         ),
       ],

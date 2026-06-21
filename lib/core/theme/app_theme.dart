@@ -93,14 +93,14 @@ class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
         indicatorColor: AppColors.primary.withOpacity(0.15),
-        iconTheme: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: AppColors.primary);
           }
           return const IconThemeData(color: AppColors.textMuted);
         }),
-        labelTextStyle: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return GoogleFonts.inter(
               fontSize: 11,
               fontWeight: FontWeight.w600,
@@ -113,7 +113,7 @@ class AppTheme {
           );
         }),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: isDark ? AppColors.darkCard : AppColors.lightCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -209,7 +209,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         indicator: const BoxDecoration(
           border: Border(
             bottom: BorderSide(color: AppColors.primary, width: 2.5),
@@ -238,18 +238,18 @@ class AppTheme {
         overlayColor: AppColors.primary.withOpacity(0.1),
       ),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) return AppColors.primary;
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return AppColors.primary;
           return Colors.grey;
         }),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary.withOpacity(0.4);
           }
           return Colors.grey.withOpacity(0.3);
         }),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 8,
@@ -268,10 +268,8 @@ class AppTheme {
         onPrimary: Colors.white,
         secondary: AppColors.accent,
         onSecondary: Colors.white,
-        surface: AppColors.darkCard,
+        surface: AppColors.darkBackground,
         onSurface: AppColors.textPrimary,
-        background: AppColors.darkBackground,
-        onBackground: AppColors.textPrimary,
         error: AppColors.error,
         onError: Colors.white,
         outline: AppColors.darkBorder,
@@ -284,8 +282,6 @@ class AppTheme {
         onSecondary: Colors.white,
         surface: AppColors.lightCard,
         onSurface: AppColors.textDark,
-        background: AppColors.lightBackground,
-        onBackground: AppColors.textDark,
         error: AppColors.error,
         onError: Colors.white,
         outline: Colors.grey.shade300,

@@ -8,6 +8,7 @@ import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/user_profile.dart';
+import 'package:fitforge/core/constants/app_enums.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});

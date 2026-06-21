@@ -11,8 +11,10 @@ class MainShell extends StatelessWidget {
     _NavTab(icon: FontAwesomeIcons.house, label: 'Home', path: '/home'),
     _NavTab(icon: FontAwesomeIcons.stopwatch, label: 'Timer', path: '/timer'),
     _NavTab(icon: FontAwesomeIcons.utensils, label: 'Diet', path: '/diet'),
-    _NavTab(icon: FontAwesomeIcons.chartLine, label: 'Progress', path: '/progress'),
-    _NavTab(icon: FontAwesomeIcons.dumbbell, label: 'Programs', path: '/programs'),
+    _NavTab(
+        icon: FontAwesomeIcons.chartLine, label: 'Progress', path: '/progress'),
+    _NavTab(
+        icon: FontAwesomeIcons.dumbbell, label: 'Programs', path: '/programs'),
   ];
 
   int _locationToIndex(String location) {
@@ -37,7 +39,7 @@ class MainShell extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 20,
               offset: const Offset(0, -5),
             ),
@@ -99,7 +101,7 @@ class _NavItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: isSelected
                   ? BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.15),
+                      color: AppColors.primary.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(20),
                     )
                   : null,

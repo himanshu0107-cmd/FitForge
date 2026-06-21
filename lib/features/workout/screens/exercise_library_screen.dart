@@ -24,10 +24,8 @@ final _filteredExercisesProvider = Provider<AsyncValue<List<Exercise>>>((ref) {
       final matchesQuery = query.isEmpty ||
           e.name.toLowerCase().contains(query) ||
           e.description.toLowerCase().contains(query);
-      final matchesMuscle =
-          muscle == null || e.primaryMuscle == muscle;
-      final matchesEquipment =
-          equipment == null || e.equipment == equipment;
+      final matchesMuscle = muscle == null || e.primaryMuscle == muscle;
+      final matchesEquipment = equipment == null || e.equipment == equipment;
       return matchesQuery && matchesMuscle && matchesEquipment;
     }).toList();
   });
@@ -61,10 +59,12 @@ class ExerciseLibraryScreen extends ConsumerWidget {
             child: TextField(
               onChanged: (v) =>
                   ref.read(_searchQueryProvider.notifier).state = v,
-              style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 14),
+              style:
+                  GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 14),
               decoration: InputDecoration(
                 hintText: 'Search exercises...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.textMuted),
+                prefixIcon:
+                    const Icon(Icons.search, color: AppColors.textMuted),
                 suffixIcon: ref.watch(_searchQueryProvider).isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear,
@@ -112,8 +112,9 @@ class ExerciseLibraryScreen extends ConsumerWidget {
                 _FilterChip(
                   label: 'Any Equipment',
                   isSelected: selectedEquipment == null,
-                  onTap: () =>
-                      ref.read(_selectedEquipmentProvider.notifier).state = null,
+                  onTap: () => ref
+                      .read(_selectedEquipmentProvider.notifier)
+                      .state = null,
                   small: true,
                 ),
                 ...Equipment.values.map((e) => _FilterChip(
@@ -137,8 +138,7 @@ class ExerciseLibraryScreen extends ConsumerWidget {
                 }
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
@@ -157,8 +157,7 @@ class ExerciseLibraryScreen extends ConsumerWidget {
               ),
               error: (e, _) => Center(
                 child: Text('Error: $e',
-                    style:
-                        const TextStyle(color: AppColors.textSecondary)),
+                    style: const TextStyle(color: AppColors.textSecondary)),
               ),
             ),
           ),
@@ -216,7 +215,7 @@ class _FilterChip extends StatelessWidget {
             horizontal: small ? 10 : 14, vertical: small ? 5 : 7),
         decoration: BoxDecoration(
           color: isSelected
-              ? activeColor.withOpacity(0.2)
+              ? activeColor.withValues(alpha: 0.2)
               : AppColors.darkSurface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -228,8 +227,7 @@ class _FilterChip extends StatelessWidget {
           label,
           style: GoogleFonts.inter(
             fontSize: small ? 11 : 12,
-            fontWeight:
-                isSelected ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             color: isSelected ? activeColor : AppColors.textMuted,
           ),
         ),
@@ -277,8 +275,8 @@ class ExerciseCard extends StatelessWidget {
                             child: const Icon(Icons.image_outlined,
                                 color: AppColors.textMuted),
                           ),
-                          errorWidget: (_, __, ___) => _Placeholder(
-                              muscle: exercise.primaryMuscle),
+                          errorWidget: (_, __, ___) =>
+                              _Placeholder(muscle: exercise.primaryMuscle),
                         )
                       : _Placeholder(muscle: exercise.primaryMuscle),
                   // Gradient overlay
@@ -300,8 +298,8 @@ class ExerciseCard extends StatelessWidget {
                       ),
                       child: Text(
                         exercise.equipment.displayName,
-                        style: GoogleFonts.inter(
-                            fontSize: 9, color: Colors.white),
+                        style:
+                            GoogleFonts.inter(fontSize: 9, color: Colors.white),
                       ),
                     ),
                   ),
@@ -326,10 +324,10 @@ class ExerciseCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 7, vertical: 2),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                     decoration: BoxDecoration(
-                      color: muscleColor.withOpacity(0.15),
+                      color: muscleColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -358,7 +356,7 @@ class _Placeholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: _muscleColor(muscle).withOpacity(0.1),
+      color: _muscleColor(muscle).withValues(alpha: 0.1),
       child: Center(
         child: Text(
           '💪',

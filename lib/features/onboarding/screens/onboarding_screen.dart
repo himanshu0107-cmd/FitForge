@@ -177,7 +177,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         disabledBackgroundColor:
-                            AppColors.primary.withOpacity(0.3),
+                            AppColors.primary.withValues(alpha: 0.3),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -274,8 +274,8 @@ class _Step1 extends StatelessWidget {
             style: GoogleFonts.inter(color: AppColors.textPrimary),
             decoration: InputDecoration(
               hintText: 'e.g. Alex',
-              prefixIcon: const Icon(Icons.person_outline,
-                  color: AppColors.textMuted),
+              prefixIcon:
+                  const Icon(Icons.person_outline, color: AppColors.textMuted),
             ),
             textCapitalization: TextCapitalization.words,
           ),
@@ -300,13 +300,12 @@ class _Step1 extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primary.withOpacity(0.15)
+                      ? AppColors.primary.withValues(alpha: 0.15)
                       : AppColors.darkCard,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected
-                        ? AppColors.primary
-                        : AppColors.darkBorder,
+                    color:
+                        isSelected ? AppColors.primary : AppColors.darkBorder,
                     width: isSelected ? 2 : 1,
                   ),
                 ),
@@ -388,7 +387,9 @@ class _Step2 extends StatelessWidget {
           Text(
             'Gender',
             style: GoogleFonts.rajdhani(
-                fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary),
           ),
           const SizedBox(height: 10),
           Row(
@@ -403,7 +404,7 @@ class _Step2 extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppColors.primary.withOpacity(0.15)
+                          ? AppColors.primary.withValues(alpha: 0.15)
                           : AppColors.darkCard,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
@@ -463,10 +464,10 @@ class _Step2 extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.08),
+              color: AppColors.primary.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                  color: AppColors.primary.withOpacity(0.3), width: 1),
+                  color: AppColors.primary.withValues(alpha: 0.3), width: 1),
             ),
             child: Row(
               children: [
@@ -510,7 +511,9 @@ class _StatField extends StatelessWidget {
         Text(
           label,
           style: GoogleFonts.rajdhani(
-              fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary),
         ),
         const SizedBox(height: 6),
         TextField(
@@ -523,8 +526,8 @@ class _StatField extends StatelessWidget {
           ),
           decoration: InputDecoration(
             suffixText: suffix,
-            suffixStyle: GoogleFonts.inter(
-                color: AppColors.textMuted, fontSize: 13),
+            suffixStyle:
+                GoogleFonts.inter(color: AppColors.textMuted, fontSize: 13),
           ),
         ),
       ],
@@ -584,21 +587,19 @@ class _Step3 extends StatelessWidget {
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary.withOpacity(0.15)
+                        ? AppColors.primary.withValues(alpha: 0.15)
                         : AppColors.darkCard,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.darkBorder,
+                      color:
+                          isSelected ? AppColors.primary : AppColors.darkBorder,
                       width: isSelected ? 2 : 1,
                     ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(sport.emoji,
-                          style: const TextStyle(fontSize: 32)),
+                      Text(sport.emoji, style: const TextStyle(fontSize: 32)),
                       const SizedBox(height: 8),
                       Text(
                         sport.displayName,

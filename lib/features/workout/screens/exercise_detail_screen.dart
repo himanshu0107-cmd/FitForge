@@ -6,6 +6,7 @@ import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/exercise.dart';
 import 'package:fitforge/features/workout/screens/exercise_library_screen.dart';
+import 'package:fitforge/core/constants/app_enums.dart';
 
 class ExerciseDetailScreen extends ConsumerWidget {
   final String exerciseId;
@@ -40,14 +41,6 @@ class ExerciseDetailScreen extends ConsumerWidget {
 class _ExerciseDetailContent extends StatelessWidget {
   final Exercise exercise;
   const _ExerciseDetailContent({required this.exercise});
-
-  Color get _muscleColor {
-    switch (exercise.primaryMuscle) {
-      case MuscleGroupExtension _:
-        return AppColors.primary;
-    }
-    return AppColors.primary;
-  }
 
   @override
   Widget build(BuildContext context) {

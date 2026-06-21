@@ -44,7 +44,7 @@ class ProfileScreen extends ConsumerWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: AppColors.primary.withValues(alpha: 0.4),
                           blurRadius: 20,
                           spreadRadius: 2,
                         ),
@@ -93,9 +93,7 @@ class ProfileScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: _StatCard2(
-                        label: 'Age',
-                        value: '${profile.age}',
-                        unit: 'yrs'),
+                        label: 'Age', value: '${profile.age}', unit: 'yrs'),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -155,7 +153,8 @@ class ProfileScreen extends ConsumerWidget {
               _SettingRow(
                 icon: FontAwesomeIcons.personRunning,
                 label: 'Sport',
-                value: '${profile.sportType.emoji} ${profile.sportType.displayName}',
+                value:
+                    '${profile.sportType.emoji} ${profile.sportType.displayName}',
               ),
               _SettingRow(
                 icon: FontAwesomeIcons.bullseye,
@@ -241,10 +240,9 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ],
         ),
-        loading: () =>
-            const Center(child: CircularProgressIndicator(color: AppColors.primary)),
-        error: (e, _) =>
-            Center(child: Text('Error: $e')),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AppColors.primary)),
+        error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
   }
@@ -312,8 +310,8 @@ class _StatCard2 extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             label,
-            style: GoogleFonts.inter(
-                fontSize: 11, color: AppColors.textSecondary),
+            style:
+                GoogleFonts.inter(fontSize: 11, color: AppColors.textSecondary),
           ),
         ],
       ),
@@ -350,7 +348,7 @@ class _TargetRow extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(

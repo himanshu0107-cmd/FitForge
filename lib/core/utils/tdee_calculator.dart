@@ -1,5 +1,4 @@
 import 'package:fitforge/core/constants/app_enums.dart';
-import 'package:fitforge/domain/models/user_profile.dart';
 
 class TdeeCalculator {
   /// Mifflin-St Jeor BMR formula

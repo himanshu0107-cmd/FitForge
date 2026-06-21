@@ -6,6 +6,7 @@ import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
+import 'package:fitforge/domain/models/workout.dart';
 
 class ProgramDetailScreen extends ConsumerWidget {
   final String programId;
@@ -70,7 +71,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      AppColors.primary.withOpacity(0.6),
+                      AppColors.primary.withValues(alpha: 0.6),
                       AppColors.darkBackground,
                     ],
                     begin: Alignment.topLeft,
@@ -144,11 +145,10 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                       itemBuilder: (context, i) {
                         final isSelected = i == _selectedWeek;
                         return GestureDetector(
-                          onTap: () =>
-                              setState(() {
-                                _selectedWeek = i;
-                                _selectedDay = null;
-                              }),
+                          onTap: () => setState(() {
+                            _selectedWeek = i;
+                            _selectedDay = null;
+                          }),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 150),
                             margin: const EdgeInsets.only(right: 10),
@@ -156,7 +156,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                                 horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.primary.withOpacity(0.2)
+                                  ? AppColors.primary.withValues(alpha: 0.2)
                                   : AppColors.darkCard,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
@@ -211,8 +211,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                       children: [
                         GestureDetector(
                           onTap: () => setState(() {
-                            _selectedDay =
-                                isExpanded ? null : day.dayNumber;
+                            _selectedDay = isExpanded ? null : day.dayNumber;
                           }),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
@@ -220,12 +219,12 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
                               color: isExpanded
-                                  ? AppColors.primary.withOpacity(0.1)
+                                  ? AppColors.primary.withValues(alpha: 0.1)
                                   : AppColors.darkCard,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
                                 color: isExpanded
-                                    ? AppColors.primary.withOpacity(0.4)
+                                    ? AppColors.primary.withValues(alpha: 0.4)
                                     : AppColors.darkBorder,
                               ),
                             ),
@@ -237,7 +236,8 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                                   decoration: BoxDecoration(
                                     color: day.isRestDay
                                         ? AppColors.darkSurface
-                                        : AppColors.primary.withOpacity(0.2),
+                                        : AppColors.primary
+                                            .withValues(alpha: 0.2),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -302,7 +302,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                                           horizontal: 12, vertical: 6),
                                       decoration: BoxDecoration(
                                         color: AppColors.primary
-                                            .withOpacity(0.15),
+                                            .withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -332,8 +332,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                         // Expanded exercises
                         if (isExpanded && !day.isRestDay)
                           Container(
-                            margin:
-                                const EdgeInsets.only(left: 20, bottom: 12),
+                            margin: const EdgeInsets.only(left: 20, bottom: 12),
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
                               color: AppColors.darkSurface,
@@ -355,7 +354,7 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
                                             height: 24,
                                             decoration: BoxDecoration(
                                               color: AppColors.primary
-                                                  .withOpacity(0.1),
+                                                  .withValues(alpha: 0.1),
                                               shape: BoxShape.circle,
                                             ),
                                             child: Center(
@@ -413,7 +412,8 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
     // Parse "4x8" -> 4
     final parts = setsReps.split('x');
     if (parts.length >= 2) {
-      return int.tryParse(parts[0].trim().replaceAll(RegExp(r'[^0-9]'), '')) ?? 3;
+      return int.tryParse(parts[0].trim().replaceAll(RegExp(r'[^0-9]'), '')) ??
+          3;
     }
     return 3;
   }
@@ -422,7 +422,8 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent> {
     // Parse "4x8" -> 8
     final parts = setsReps.split('x');
     if (parts.length >= 2) {
-      return int.tryParse(parts[1].trim().replaceAll(RegExp(r'[^0-9]'), '')) ?? 10;
+      return int.tryParse(parts[1].trim().replaceAll(RegExp(r'[^0-9]'), '')) ??
+          10;
     }
     return 10;
   }
@@ -451,6 +452,3 @@ class _HeaderBadge extends StatelessWidget {
     );
   }
 }
-
-// Import needed for PlannedExercise
-import 'package:fitforge/domain/models/workout.dart';

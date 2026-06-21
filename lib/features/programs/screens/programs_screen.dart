@@ -109,8 +109,8 @@ class ProgramCard extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    _sportColor.withOpacity(0.4),
-                    _sportColor.withOpacity(0.1),
+                    _sportColor.withValues(alpha: 0.4),
+                    _sportColor.withValues(alpha: 0.1),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -201,10 +201,10 @@ class ProgramCard extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 14, vertical: 8),
                         decoration: BoxDecoration(
-                          color: _sportColor.withOpacity(0.15),
+                          color: _sportColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                              color: _sportColor.withOpacity(0.3)),
+                              color: _sportColor.withValues(alpha: 0.3)),
                         ),
                         child: Text(
                           'View Plan',
