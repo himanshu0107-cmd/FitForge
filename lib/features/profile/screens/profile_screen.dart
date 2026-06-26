@@ -86,7 +86,7 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 28),
 
             // Body Stats
-            _SectionHeader(title: 'Body Stats', emoji: '⚖️'),
+            const _SectionHeader(title: 'Body Stats', emoji: '⚖️'),
             const SizedBox(height: 12),
             if (profile != null)
               Row(
@@ -115,7 +115,7 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Goals
-            _SectionHeader(title: 'Targets', emoji: '🎯'),
+            const _SectionHeader(title: 'Targets', emoji: '🎯'),
             const SizedBox(height: 12),
             if (profile != null) ...[
               _TargetRow(
@@ -147,7 +147,7 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Sport
-            _SectionHeader(title: 'Training', emoji: '🏋️'),
+            const _SectionHeader(title: 'Training', emoji: '🏋️'),
             const SizedBox(height: 12),
             if (profile != null) ...[
               _SettingRow(
@@ -166,7 +166,7 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // App Settings
-            _SectionHeader(title: 'App Settings', emoji: '⚙️'),
+            const _SectionHeader(title: 'App Settings', emoji: '⚙️'),
             const SizedBox(height: 12),
 
             // Dark mode toggle
@@ -212,16 +212,82 @@ class ProfileScreen extends ConsumerWidget {
                 label: 'Workout Reminders',
                 value: profile.notificationsEnabled,
                 onChanged: (v) {
-                  // TODO: update notification settings
+                  ref.read(userProfileProvider.notifier).toggleWorkoutReminders(v);
                 },
               ),
+              if (profile.notificationsEnabled) ...[
+                const SizedBox(height: 10),
+                GestureDetector(
+                  onTap: () async {
+                    final timeParts = (profile.workoutReminderTime ?? '08:00').split(':');
+                    final initialTime = TimeOfDay(
+                      hour: int.tryParse(timeParts[0]) ?? 8,
+                      minute: int.tryParse(timeParts[1]) ?? 0,
+                    );
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: initialTime,
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.dark(
+                              primary: AppColors.primary,
+                              onPrimary: Colors.black,
+                              surface: AppColors.darkCard,
+                              onSurface: AppColors.textPrimary,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (picked != null) {
+                      final formattedTime = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+                      await ref
+                          .read(userProfileProvider.notifier)
+                          .setWorkoutReminderTime(formattedTime);
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.darkCard,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.darkBorder),
+                    ),
+                    child: Row(
+                      children: [
+                        const FaIcon(FontAwesomeIcons.clock, color: AppColors.primary, size: 14),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Reminder Time',
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          profile.workoutReminderTime ?? '08:00',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 10),
               _SwitchRow(
                 icon: FontAwesomeIcons.droplet,
                 label: 'Water Reminders',
                 value: profile.waterReminderEnabled,
                 onChanged: (v) {
-                  // TODO: update water reminder
+                  ref.read(userProfileProvider.notifier).toggleWaterReminders(v);
                 },
               ),
             ],

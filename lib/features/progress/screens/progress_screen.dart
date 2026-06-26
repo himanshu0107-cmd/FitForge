@@ -86,14 +86,14 @@ class ProgressScreen extends ConsumerWidget {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-          children: [
-            const _WeightChartSection(),
-            const SizedBox(height: 20),
-            const _PersonalRecordsSection(),
-            const SizedBox(height: 20),
-            const _WorkoutCalendarSection(),
-            const SizedBox(height: 20),
-            const _RecentSessionsSection(),
+          children: const [
+            _WeightChartSection(),
+            SizedBox(height: 20),
+            _PersonalRecordsSection(),
+            SizedBox(height: 20),
+            _WorkoutCalendarSection(),
+            SizedBox(height: 20),
+            _RecentSessionsSection(),
           ],
         ),
       ),
@@ -273,7 +273,7 @@ class _WeightChartSection extends ConsumerWidget {
                       LineChartData(
                         gridData: FlGridData(
                           drawVerticalLine: false,
-                          getDrawingHorizontalLine: (_) => FlLine(
+                          getDrawingHorizontalLine: (_) => const FlLine(
                             color: AppColors.chartGrid,
                             strokeWidth: 1,
                           ),

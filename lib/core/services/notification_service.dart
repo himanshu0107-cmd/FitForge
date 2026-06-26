@@ -208,6 +208,10 @@ class NotificationService {
     }
   }
 
+  Future<void> cancelWorkoutReminder() async {
+    await _plugin.cancel(AppConstants.workoutReminderId);
+  }
+
   Future<void> cancelAll() async {
     await _plugin.cancelAll();
   }

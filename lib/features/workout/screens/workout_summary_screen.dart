@@ -55,6 +55,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
       backgroundColor: AppColors.darkBackground,
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
@@ -64,7 +65,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               _buildHeader(),
               const SizedBox(height: 32),
 
-              // Stats grid
+              // Stats grid using sheen cards
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -111,20 +112,28 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               // Exercise breakdown
               _ExerciseBreakdown(logs: s.exerciseLogs),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 36),
 
               // CTA Buttons
               SizedBox(
                 width: double.infinity,
                 height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: () => context.go(AppRoutes.home),
-                  icon: const FaIcon(FontAwesomeIcons.house, size: 16),
-                  label: Text(
-                    'Back to Home',
-                    style: GoogleFonts.rajdhani(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
+                child: _PressScale(
+                  onTap: () => context.go(AppRoutes.home),
+                  child: ElevatedButton.icon(
+                    onPressed: null, // Gesture detector in PressScale
+                    icon: const FaIcon(FontAwesomeIcons.house, size: 15, color: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      disabledBackgroundColor: AppColors.primary,
+                      disabledForegroundColor: Colors.white,
+                    ),
+                    label: Text(
+                      'Back to Home',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -133,14 +142,21 @@ class WorkoutSummaryScreen extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 height: 48,
-                child: OutlinedButton.icon(
-                  onPressed: () => context.go(AppRoutes.progress),
-                  icon: const FaIcon(FontAwesomeIcons.chartLine, size: 14),
-                  label: Text(
-                    'View Progress',
-                    style: GoogleFonts.rajdhani(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                child: _PressScale(
+                  onTap: () => context.go(AppRoutes.progress),
+                  child: OutlinedButton.icon(
+                    onPressed: null,
+                    icon: const FaIcon(FontAwesomeIcons.chartLine, size: 14, color: AppColors.primary),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.primary, width: 1.5),
+                    ),
+                    label: Text(
+                      'View Progress',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ),
@@ -161,13 +177,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
           decoration: BoxDecoration(
             gradient: AppGradients.primaryGradient,
             shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
-                blurRadius: 30,
-                spreadRadius: 5,
-              ),
-            ],
+            boxShadow: AppShadows.glow(AppColors.primary, intensity: 0.5),
           ),
           child: const Center(
             child: Text('🏆', style: TextStyle(fontSize: 48)),
@@ -178,7 +188,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
           'Workout Complete!',
           style: GoogleFonts.rajdhani(
             fontSize: 32,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
@@ -187,6 +197,7 @@ class WorkoutSummaryScreen extends ConsumerWidget {
           session?.workoutName ?? 'Great session!',
           style: GoogleFonts.inter(
             fontSize: 15,
+            fontWeight: FontWeight.w500,
             color: AppColors.textSecondary,
           ),
         ),
@@ -212,11 +223,7 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.darkBorder),
-      ),
+      decoration: AppDecorations.sheenCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,9 +234,10 @@ class _StatCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: color.withValues(alpha: 0.2)),
             ),
             child: Center(
-              child: FaIcon(icon, color: color, size: 16),
+              child: FaIcon(icon, color: color, size: 15),
             ),
           ),
           Column(
@@ -239,15 +247,18 @@ class _StatCard extends StatelessWidget {
                 value,
                 style: GoogleFonts.rajdhani(
                   fontSize: 26,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
+              const SizedBox(height: 2),
               Text(
-                label,
-                style: GoogleFonts.inter(
-                  fontSize: 12,
+                label.toUpperCase(),
+                style: GoogleFonts.rajdhani(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.textMuted,
+                  letterSpacing: 0.5,
                 ),
               ),
             ],
@@ -265,16 +276,18 @@ class _PRSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.warning.withValues(alpha: 0.15),
-            AppColors.accent.withValues(alpha: 0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.warning.withValues(alpha: 0.05),
+            blurRadius: 16,
+            spreadRadius: 1,
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,20 +297,20 @@ class _PRSection extends StatelessWidget {
               const Text('🏅', style: TextStyle(fontSize: 20)),
               const SizedBox(width: 8),
               Text(
-                'New Personal Records!',
+                'Personal Records Smashed!',
                 style: GoogleFonts.rajdhani(
                   fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.warning,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           ...logs.map((log) {
             final best = log.bestSet;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 6),
+              padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
                   const Icon(Icons.star, color: AppColors.warning, size: 14),
@@ -307,7 +320,7 @@ class _PRSection extends StatelessWidget {
                     style: GoogleFonts.inter(
                       fontSize: 13,
                       color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const Spacer(),
@@ -316,7 +329,7 @@ class _PRSection extends StatelessWidget {
                       '${best.weightKg}kg × ${best.reps}',
                       style: GoogleFonts.rajdhani(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.bold,
                         color: AppColors.warning,
                       ),
                     ),
@@ -345,7 +358,7 @@ class _ExerciseBreakdown extends StatelessWidget {
           'Exercise Breakdown',
           style: GoogleFonts.rajdhani(
             fontSize: 20,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
@@ -364,12 +377,8 @@ class _ExerciseSummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.darkBorder),
-      ),
+      padding: const EdgeInsets.all(16),
+      decoration: AppDecorations.surfaceCard,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -379,8 +388,8 @@ class _ExerciseSummaryRow extends StatelessWidget {
                 child: Text(
                   log.exerciseName,
                   style: GoogleFonts.rajdhani(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
                     color: log.isSkipped
                         ? AppColors.textMuted
                         : AppColors.textPrimary,
@@ -399,6 +408,7 @@ class _ExerciseSummaryRow extends StatelessWidget {
                     'Skipped',
                     style: GoogleFonts.inter(
                       fontSize: 10,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.error,
                     ),
                   ),
@@ -409,36 +419,94 @@ class _ExerciseSummaryRow extends StatelessWidget {
                   style: GoogleFonts.rajdhani(
                     fontSize: 14,
                     color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
             ],
           ),
           if (!log.isSkipped && log.sets.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Row(
-              children: log.sets.take(5).map((set) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 6),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppColors.darkSurface,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.darkBorder),
-                  ),
-                  child: Text(
-                    '${set.weightKg.toStringAsFixed(set.weightKg % 1 == 0 ? 0 : 1)}×${set.reps}',
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      color: AppColors.textSecondary,
+            const SizedBox(height: 10),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                children: log.sets.take(6).map((set) {
+                  return Container(
+                    margin: const EdgeInsets.only(right: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.darkCard,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppColors.darkBorder),
                     ),
-                  ),
-                );
-              }).toList(),
+                    child: Text(
+                      '${set.weightKg.toStringAsFixed(set.weightKg % 1 == 0 ? 0 : 1)}kg × ${set.reps}',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// PRESS SCALE WRAPPER (LOCAL)
+// ─────────────────────────────────────────
+class _PressScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _PressScale({
+    required this.child,
+    this.onTap,
+  });
+
+  @override
+  State<_PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<_PressScale>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 100));
+    _scale = Tween<double>(begin: 1.0, end: 0.96).animate(
+        CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? (_) => _ctrl.forward() : null,
+      onTapUp: (_) {
+        _ctrl.reverse();
+        widget.onTap?.call();
+      },
+      onTapCancel: () => _ctrl.reverse(),
+      child: ScaleTransition(
+        scale: _scale,
+        child: widget.child,
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
 import 'package:fitforge/core/utils/tdee_calculator.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
+import 'package:fitforge/domain/models/user_profile.dart';
 
 const _uuid = Uuid();
 
@@ -49,6 +50,24 @@ class _DietScreenState extends ConsumerState<DietScreen>
         ),
         bottom: TabBar(
           controller: _tabController,
+          indicatorColor: AppColors.primary,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Colors.transparent,
+          labelColor: AppColors.textPrimary,
+          unselectedLabelColor: AppColors.textMuted,
+          labelStyle: GoogleFonts.rajdhani(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedLabelStyle: GoogleFonts.rajdhani(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+          indicator: UnderlineTabIndicator(
+            borderSide: const BorderSide(color: AppColors.primary, width: 3),
+            borderRadius: BorderRadius.circular(3),
+            insets: const EdgeInsets.symmetric(horizontal: 20),
+          ),
           tabs: const [
             Tab(text: 'Today'),
             Tab(text: 'Meal Plans'),
@@ -71,18 +90,21 @@ class _DietScreenState extends ConsumerState<DietScreen>
             scale: _tabController.index == 0 ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
-            child: FloatingActionButton.extended(
-              onPressed: _tabController.index == 0
+            child: _PressScale(
+              onTap: _tabController.index == 0
                   ? () => _showAddFoodDialog(context, ref)
                   : null,
-              backgroundColor: AppColors.primary,
-              icon: const Icon(Icons.add, color: Colors.white),
-              label: Text(
-                'Log Food',
-                style: GoogleFonts.rajdhani(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white),
+              child: FloatingActionButton.extended(
+                onPressed: null,
+                backgroundColor: AppColors.primary,
+                icon: const Icon(Icons.add, color: Colors.white),
+                label: Text(
+                  'Log Food',
+                  style: GoogleFonts.rajdhani(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
               ),
             ),
           );
@@ -117,44 +139,59 @@ class _DietScreenState extends ConsumerState<DietScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 38,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.darkBorder,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
                 Text(
-                  'Log Food',
+                  'Log Food Entry',
                   style: GoogleFonts.rajdhani(
                     fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
 
                 // Meal type selector
                 Wrap(
                   spacing: 8,
+                  runSpacing: 8,
                   children: MealType.values.map((t) {
                     final isSelected = t == selectedType;
-                    return GestureDetector(
+                    return _PressScale(
                       onTap: () => setModalState(() => selectedType = t),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? AppColors.primary.withValues(alpha: 0.2)
+                              ? AppColors.primary.withValues(alpha: 0.15)
                               : AppColors.darkSurface,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isSelected
                                 ? AppColors.primary
                                 : AppColors.darkBorder,
+                            width: isSelected ? 1.5 : 1,
                           ),
                         ),
                         child: Text(
                           '${t.emoji} ${t.displayName}',
                           style: GoogleFonts.inter(
                             fontSize: 11,
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                             color: isSelected
                                 ? AppColors.primary
-                                : AppColors.textMuted,
+                                : AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -162,60 +199,60 @@ class _DietScreenState extends ConsumerState<DietScreen>
                   }).toList(),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 _DialogField(
                     ctrl: nameCtrl,
-                    label: 'Food Name',
+                    label: 'FOOD NAME',
                     hint: 'e.g. Chicken Breast'),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Expanded(
                         child: _DialogField(
                             ctrl: gramsCtrl,
-                            label: 'Grams',
+                            label: 'GRAMS',
                             hint: '100',
                             isNumber: true)),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 14),
                     Expanded(
                         child: _DialogField(
                             ctrl: calCtrl,
-                            label: 'Calories',
+                            label: 'CALORIES (KCAL)',
                             hint: '0',
                             isNumber: true)),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     Expanded(
                         child: _DialogField(
                             ctrl: proteinCtrl,
-                            label: 'Protein (g)',
+                            label: 'PROTEIN (G)',
                             hint: '0',
                             isNumber: true)),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     Expanded(
                         child: _DialogField(
                             ctrl: carbCtrl,
-                            label: 'Carbs (g)',
+                            label: 'CARBS (G)',
                             hint: '0',
                             isNumber: true)),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     Expanded(
                         child: _DialogField(
                             ctrl: fatCtrl,
-                            label: 'Fat (g)',
+                            label: 'FAT (G)',
                             hint: '0',
                             isNumber: true)),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
+                  height: 52,
+                  child: _PressScale(
+                    onTap: () {
                       if (nameCtrl.text.trim().isEmpty) return;
                       ref.read(foodLogProvider.notifier).logFood(
                             FoodEntry(
@@ -233,9 +270,16 @@ class _DietScreenState extends ConsumerState<DietScreen>
                           );
                       Navigator.pop(ctx);
                     },
-                    child: Text('Save',
-                        style: GoogleFonts.rajdhani(
-                            fontSize: 16, fontWeight: FontWeight.w700)),
+                    child: ElevatedButton(
+                      onPressed: null,
+                      style: ElevatedButton.styleFrom(
+                        disabledBackgroundColor: AppColors.primary,
+                        disabledForegroundColor: Colors.white,
+                      ),
+                      child: Text('Save Food Entry',
+                          style: GoogleFonts.rajdhani(
+                              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
                   ),
                 ),
               ],
@@ -810,7 +854,7 @@ class _MacrosTab extends StatelessWidget {
 
 class _TdeeCard extends StatelessWidget {
   final TdeeResult tdee;
-  final profile;
+  final UserProfile profile;
   const _TdeeCard({required this.tdee, required this.profile});
 
   @override
@@ -1091,16 +1135,92 @@ class _DialogField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: GoogleFonts.inter(fontSize: 11, color: AppColors.textMuted)),
-        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.rajdhani(
+              fontSize: 12,
+              color: AppColors.textMuted,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1),
+        ),
+        const SizedBox(height: 6),
         TextField(
           controller: ctrl,
           keyboardType: isNumber ? TextInputType.number : TextInputType.text,
           style: GoogleFonts.inter(color: AppColors.textPrimary, fontSize: 14),
-          decoration: InputDecoration(hintText: hint),
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            fillColor: AppColors.darkSurface,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.darkBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+            ),
+          ),
         ),
       ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// PRESS SCALE WRAPPER (LOCAL)
+// ─────────────────────────────────────────
+class _PressScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _PressScale({
+    required this.child,
+    this.onTap,
+  });
+
+  @override
+  State<_PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<_PressScale>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 100));
+    _scale = Tween<double>(begin: 1.0, end: 0.96).animate(
+        CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? (_) => _ctrl.forward() : null,
+      onTapUp: (_) {
+        _ctrl.reverse();
+        widget.onTap?.call();
+      },
+      onTapCancel: () => _ctrl.reverse(),
+      child: ScaleTransition(
+        scale: _scale,
+        child: widget.child,
+      ),
     );
   }
 }

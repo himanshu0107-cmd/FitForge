@@ -272,10 +272,10 @@ class _Step1 extends StatelessWidget {
           TextField(
             controller: nameController,
             style: GoogleFonts.inter(color: AppColors.textPrimary),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'e.g. Alex',
               prefixIcon:
-                  const Icon(Icons.person_outline, color: AppColors.textMuted),
+                  Icon(Icons.person_outline, color: AppColors.textMuted),
             ),
             textCapitalization: TextCapitalization.words,
           ),

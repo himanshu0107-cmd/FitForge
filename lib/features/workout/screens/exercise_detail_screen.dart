@@ -66,7 +66,7 @@ class _ExerciseDetailContent extends StatelessWidget {
                         )
                       : Container(color: AppColors.darkSurface),
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,

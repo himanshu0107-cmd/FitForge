@@ -651,7 +651,7 @@ class _StatsStrip extends StatelessWidget {
             emoji: weeklyWorkouts >= 3 ? '🎯' : '⚡',
             value: weeklyWorkouts >= 3 ? 'On Track' : 'Keep Going',
             label: 'Weekly Goal',
-            sub: '${weeklyWorkouts}/5 done',
+            sub: '$weeklyWorkouts/5 done',
             color:
                 weeklyWorkouts >= 3 ? AppColors.success : AppColors.textMuted,
           ),
@@ -1319,7 +1319,7 @@ class _ShimmerBentoState extends State<_ShimmerBento>
         gradient: LinearGradient(
           begin: Alignment(_shimmer.value - 1, 0),
           end: Alignment(_shimmer.value, 0),
-          colors: [
+          colors: const [
             AppColors.darkCard,
             AppColors.darkSurface,
             AppColors.darkCard,

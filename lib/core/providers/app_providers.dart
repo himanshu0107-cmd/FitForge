@@ -12,12 +12,13 @@ import 'package:fitforge/domain/models/workout.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
 import 'package:uuid/uuid.dart';
+import 'package:fitforge/core/services/notification_service.dart';
 
 // ─────────────────────────────────────────
 // CORE PROVIDERS
 // ─────────────────────────────────────────
 
-final _uuid = const Uuid();
+const _uuid = Uuid();
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize in main with override');
@@ -71,13 +72,77 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<UserProfile?>> {
               proteinGoal: profile.proteinGoal,
               carbGoal: profile.carbGoal,
               fatGoal: profile.fatGoal,
+              workoutReminderTime: Value(profile.workoutReminderTime),
+              waterReminderEnabled: Value(profile.waterReminderEnabled),
+              notificationsEnabled: Value(profile.notificationsEnabled),
               createdAt: profile.createdAt,
             ),
           );
       await _prefs.setBool(AppConstants.kOnboardingComplete, true);
       state = AsyncValue.data(profile);
+      _syncNotifications(profile);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> toggleWorkoutReminders(bool enabled) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+    final updated = current.copyWith(
+      notificationsEnabled: enabled,
+      workoutReminderTime: current.workoutReminderTime ?? '08:00',
+    );
+    await saveProfile(updated);
+  }
+
+  Future<void> setWorkoutReminderTime(String time) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+    final updated = current.copyWith(
+      workoutReminderTime: time,
+    );
+    await saveProfile(updated);
+  }
+
+  Future<void> toggleWaterReminders(bool enabled) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+    final updated = current.copyWith(
+      waterReminderEnabled: enabled,
+    );
+    await saveProfile(updated);
+  }
+
+  Future<void> _syncNotifications(UserProfile profile) async {
+    try {
+      final notifService = NotificationService();
+      
+      // Sync workout reminders
+      if (profile.notificationsEnabled) {
+        await notifService.requestPermissions();
+        final timeStr = profile.workoutReminderTime ?? '08:00';
+        final parts = timeStr.split(':');
+        if (parts.length == 2) {
+          final hour = int.tryParse(parts[0]);
+          final min = int.tryParse(parts[1]);
+          if (hour != null && min != null) {
+            await notifService.scheduleWorkoutReminder(hour: hour, minute: min);
+          }
+        }
+      } else {
+        await notifService.cancelWorkoutReminder();
+      }
+
+      // Sync water reminders
+      if (profile.waterReminderEnabled) {
+        await notifService.requestPermissions();
+        await notifService.scheduleWaterReminders();
+      } else {
+        await notifService.cancelWaterReminders();
+      }
+    } catch (e) {
+      debugPrint('Error syncing notifications: $e');
     }
   }
 

@@ -6,8 +6,13 @@ import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/router/app_router.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 
+import 'package:fitforge/core/services/notification_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize notifications
+  await NotificationService().initialize();
 
   // Lock to portrait orientation
   await SystemChrome.setPreferredOrientations([

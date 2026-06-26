@@ -45,17 +45,18 @@ class ExerciseLibraryScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text('Exercise Library',
             style: GoogleFonts.rajdhani(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: AppColors.textPrimary)),
         backgroundColor: AppColors.darkBackground,
+        elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       body: Column(
         children: [
           // Search bar
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
             child: TextField(
               onChanged: (v) =>
                   ref.read(_searchQueryProvider.notifier).state = v,
@@ -65,6 +66,21 @@ class ExerciseLibraryScreen extends ConsumerWidget {
                 hintText: 'Search exercises...',
                 prefixIcon:
                     const Icon(Icons.search, color: AppColors.textMuted),
+                filled: true,
+                fillColor: AppColors.darkCard,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.darkBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
                 suffixIcon: ref.watch(_searchQueryProvider).isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear,
@@ -79,13 +95,14 @@ class ExerciseLibraryScreen extends ConsumerWidget {
 
           // Muscle filter chips
           SizedBox(
-            height: 48,
+            height: 52,
             child: ListView(
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               children: [
                 _FilterChip(
-                  label: 'All',
+                  label: 'All Muscles',
                   isSelected: selectedMuscle == null,
                   onTap: () =>
                       ref.read(_selectedMuscleProvider.notifier).state = null,
@@ -104,10 +121,11 @@ class ExerciseLibraryScreen extends ConsumerWidget {
 
           // Equipment filter chips
           SizedBox(
-            height: 44,
+            height: 48,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               children: [
                 _FilterChip(
                   label: 'Any Equipment',
@@ -138,6 +156,7 @@ class ExerciseLibraryScreen extends ConsumerWidget {
                 }
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
+                  physics: const BouncingScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 12,
@@ -206,29 +225,38 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final activeColor = color ?? AppColors.primary;
-    return GestureDetector(
+    return _PressScale(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 180),
         margin: const EdgeInsets.only(right: 8),
         padding: EdgeInsets.symmetric(
-            horizontal: small ? 10 : 14, vertical: small ? 5 : 7),
+            horizontal: small ? 12 : 16, vertical: small ? 6 : 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? activeColor.withValues(alpha: 0.2)
-              : AppColors.darkSurface,
+              ? activeColor.withValues(alpha: 0.15)
+              : AppColors.darkCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? activeColor : AppColors.darkBorder,
             width: isSelected ? 1.5 : 1,
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: activeColor.withValues(alpha: 0.15),
+                    blurRadius: 10,
+                    spreadRadius: 0,
+                  )
+                ]
+              : null,
         ),
         child: Text(
           label,
           style: GoogleFonts.inter(
             fontSize: small ? 11 : 12,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? activeColor : AppColors.textMuted,
+            color: isSelected ? activeColor : AppColors.textSecondary,
           ),
         ),
       ),
@@ -249,13 +277,24 @@ class ExerciseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final muscleColor = _muscleColor(exercise.primaryMuscle);
-    return GestureDetector(
+    return _PressScale(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.darkCard,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: muscleColor.withValues(alpha: 0.25),
+            width: 1,
+          ),
+          boxShadow: [
+            ...AppShadows.card,
+            BoxShadow(
+              color: muscleColor.withValues(alpha: 0.05),
+              blurRadius: 16,
+              spreadRadius: 0,
+            ),
+          ],
         ),
         clipBehavior: Clip.hardEdge,
         child: Column(
@@ -293,13 +332,16 @@ class ExerciseCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 7, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.black54,
+                        color: Colors.black.withValues(alpha: 0.65),
                         borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: AppColors.glassBorder),
                       ),
                       child: Text(
                         exercise.equipment.displayName,
-                        style:
-                            GoogleFonts.inter(fontSize: 9, color: Colors.white),
+                        style: GoogleFonts.inter(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary),
                       ),
                     ),
                   ),
@@ -308,7 +350,7 @@ class ExerciseCard extends StatelessWidget {
             ),
             // Info
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -317,24 +359,25 @@ class ExerciseCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.rajdhani(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: muscleColor.withValues(alpha: 0.15),
+                      color: muscleColor.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: muscleColor.withValues(alpha: 0.15)),
                     ),
                     child: Text(
                       exercise.primaryMuscle.displayName,
                       style: GoogleFonts.inter(
                         fontSize: 10,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: muscleColor,
                       ),
                     ),
@@ -355,12 +398,22 @@ class _Placeholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mColor = _muscleColor(muscle);
     return Container(
-      color: _muscleColor(muscle).withValues(alpha: 0.1),
-      child: Center(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            mColor.withValues(alpha: 0.15),
+            AppColors.darkSurface,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: const Center(
         child: Text(
           '💪',
-          style: const TextStyle(fontSize: 36),
+          style: TextStyle(fontSize: 32),
         ),
       ),
     );
@@ -382,6 +435,7 @@ class _EmptyState extends StatelessWidget {
             'No exercises found',
             style: GoogleFonts.rajdhani(
               fontSize: 20,
+              fontWeight: FontWeight.w700,
               color: AppColors.textSecondary,
             ),
           ),
@@ -394,6 +448,59 @@ class _EmptyState extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// PRESS SCALE WRAPPER (LOCAL)
+// ─────────────────────────────────────────
+class _PressScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _PressScale({
+    required this.child,
+    this.onTap,
+  });
+
+  @override
+  State<_PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<_PressScale>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _ctrl;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 100));
+    _scale = Tween<double>(begin: 1.0, end: 0.96).animate(
+        CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: widget.onTap != null ? (_) => _ctrl.forward() : null,
+      onTapUp: (_) {
+        _ctrl.reverse();
+        widget.onTap?.call();
+      },
+      onTapCancel: () => _ctrl.reverse(),
+      child: ScaleTransition(
+        scale: _scale,
+        child: widget.child,
       ),
     );
   }
