@@ -5,7 +5,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
-import 'package:fitforge/domain/models/diet_and_progress.dart';
 import 'package:fitforge/domain/models/workout.dart';
 
 class ProgressScreen extends ConsumerWidget {
@@ -38,6 +37,7 @@ class ProgressScreen extends ConsumerWidget {
         onRefresh: () async {
           ref.invalidate(weightLogProvider);
           ref.invalidate(personalRecordsProvider);
+          ref.invalidate(workoutHistoryProvider);
         },
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 80),
@@ -47,6 +47,8 @@ class ProgressScreen extends ConsumerWidget {
             const _PersonalRecordsSection(),
             const SizedBox(height: 24),
             const _WorkoutCalendarSection(),
+            const SizedBox(height: 24),
+            const _RecentSessionsSection(),
           ],
         ),
       ),
@@ -614,7 +616,7 @@ class _WorkoutCalendarSection extends ConsumerWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
                     color: AppColors.primary
-                        .withOpacity(0.2 + i * 0.25),
+                        .withValues(alpha: 0.2 + i * 0.25),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 );
@@ -627,6 +629,157 @@ class _WorkoutCalendarSection extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// RECENT SESSIONS
+// ─────────────────────────────────────────
+class _RecentSessionsSection extends ConsumerWidget {
+  const _RecentSessionsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final historyAsync = ref.watch(workoutHistoryProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Recent Sessions',
+          style: GoogleFonts.rajdhani(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        const SizedBox(height: 12),
+        historyAsync.when(
+          data: (sessions) {
+            if (sessions.isEmpty) {
+              return Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.darkCard,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.darkBorder),
+                ),
+                child: Column(
+                  children: [
+                    const Text('🏋️', style: TextStyle(fontSize: 40)),
+                    const SizedBox(height: 12),
+                    Text(
+                      'No workouts yet',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Complete a session to see your history here',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Column(
+              children: sessions.take(10).map((session) {
+                final duration = session.durationMinutes;
+                final volume = session.totalVolumeKg;
+                final date = DateFormat('EEE, MMM d').format(session.startTime);
+                final time = DateFormat('h:mm a').format(session.startTime);
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.darkCard,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.darkBorder),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          child: Text('🏋️', style: TextStyle(fontSize: 22)),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              session.workoutName,
+                              style: GoogleFonts.rajdhani(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            Text(
+                              '$date • $time',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '${duration}m',
+                            style: GoogleFonts.rajdhani(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          Text(
+                            '${volume.toStringAsFixed(0)} kg',
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
+          },
+          loading: () => const Center(
+            child: Padding(
+              padding: EdgeInsets.all(24),
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+          ),
+          error: (e, _) => Text(
+            'Error loading sessions: $e',
+            style: const TextStyle(color: AppColors.textSecondary),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
@@ -65,9 +64,17 @@ class _DietScreenState extends ConsumerState<DietScreen>
           _MacrosTab(ref: ref),
         ],
       ),
-      floatingActionButton: _tabController.index == 0
-          ? FloatingActionButton.extended(
-              onPressed: () => _showAddFoodDialog(context, ref),
+      floatingActionButton: AnimatedBuilder(
+        animation: _tabController,
+        builder: (context, _) {
+          return AnimatedScale(
+            scale: _tabController.index == 0 ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            child: FloatingActionButton.extended(
+              onPressed: _tabController.index == 0
+                  ? () => _showAddFoodDialog(context, ref)
+                  : null,
               backgroundColor: AppColors.primary,
               icon: const Icon(Icons.add, color: Colors.white),
               label: Text(
@@ -77,10 +84,13 @@ class _DietScreenState extends ConsumerState<DietScreen>
                     fontWeight: FontWeight.w700,
                     color: Colors.white),
               ),
-            )
-          : null,
+            ),
+          );
+        },
+      ),
     );
   }
+
 
   void _showAddFoodDialog(BuildContext context, WidgetRef ref) {
     final nameCtrl = TextEditingController();

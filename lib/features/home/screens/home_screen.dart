@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/user_profile.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
+
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -19,6 +19,12 @@ class HomeScreen extends ConsumerWidget {
     final profileAsync = ref.watch(userProfileProvider);
     final todayCalories = ref.watch(todayCaloriesProvider);
     final streakAsync = ref.watch(streakProvider);
+    final foodLog = ref.watch(foodLogProvider);
+    final weeklyWorkoutsAsync = ref.watch(weeklyWorkoutsProvider);
+    final todayProtein = foodLog.maybeWhen(
+      data: (entries) => entries.fold<double>(0, (sum, e) => sum + e.proteinGrams).toInt(),
+      orElse: () => 0,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
@@ -41,7 +47,7 @@ class HomeScreen extends ConsumerWidget {
                   data: (profile) => _CalorieRingCard(
                     eaten: todayCalories,
                     goal: profile?.calorieGoal ?? 2500,
-                    proteinEaten: 0,
+                    proteinEaten: todayProtein,
                     proteinGoal: profile?.proteinGoal ?? 150,
                   ),
                   loading: () => const _LoadingCard(),
@@ -49,6 +55,11 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
                 _QuickStartRow(ref: ref),
+                const SizedBox(height: 20),
+                _WeeklyStatsStrip(
+                  weeklyWorkouts: weeklyWorkoutsAsync.valueOrNull ?? 0,
+                  streak: streakAsync.valueOrNull ?? 0,
+                ),
                 const SizedBox(height: 20),
                 const _TodayWorkoutCard(),
                 const SizedBox(height: 20),
@@ -396,6 +407,102 @@ class _QuickStartRow extends StatelessWidget {
   }
 }
 
+class _WeeklyStatsStrip extends StatelessWidget {
+  final int weeklyWorkouts;
+  final int streak;
+
+  const _WeeklyStatsStrip({
+    required this.weeklyWorkouts,
+    required this.streak,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.darkBorder),
+      ),
+      child: Row(
+        children: [
+          _StatPill(
+            emoji: '🏋️',
+            value: '$weeklyWorkouts',
+            label: 'This Week',
+            color: AppColors.primary,
+          ),
+          _buildDivider(),
+          _StatPill(
+            emoji: '🔥',
+            value: '$streak',
+            label: 'Day Streak',
+            color: AppColors.warning,
+          ),
+          _buildDivider(),
+          _StatPill(
+            emoji: '⚡',
+            value: weeklyWorkouts >= 3 ? 'On Track' : 'Keep Going',
+            label: 'Weekly Goal',
+            color: weeklyWorkouts >= 3 ? AppColors.success : AppColors.textMuted,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      width: 1,
+      height: 36,
+      margin: const EdgeInsets.symmetric(horizontal: 12),
+      color: AppColors.darkBorder,
+    );
+  }
+}
+
+class _StatPill extends StatelessWidget {
+  final String emoji;
+  final String value;
+  final String label;
+  final Color color;
+
+  const _StatPill({
+    required this.emoji,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: GoogleFonts.rajdhani(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 10,
+              color: AppColors.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _QuickButton extends StatelessWidget {
   final FaIconData icon;
   final String label;
@@ -453,6 +560,7 @@ class _TodayWorkoutCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final programsAsync = ref.watch(programsProvider);
+    final activeProgramAsync = ref.watch(activeProgramProvider);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -470,7 +578,7 @@ class _TodayWorkoutCard extends ConsumerWidget {
                 style: GoogleFonts.rajdhani(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   letterSpacing: 1,
                 ),
               ),
@@ -479,15 +587,67 @@ class _TodayWorkoutCard extends ConsumerWidget {
           const SizedBox(height: 12),
           programsAsync.when(
             data: (programs) {
-              final program = programs.isNotEmpty ? programs.first : null;
-              final day = program?.weeks.isNotEmpty == true
-                  ? program!.weeks.first.days.first
+              // Find active program or fall back to first
+              final activeState = activeProgramAsync.valueOrNull;
+              final program = activeState != null
+                  ? programs.firstWhere(
+                      (p) => p.id == activeState.programId,
+                      orElse: () => programs.isNotEmpty ? programs.first : programs.first,
+                    )
+                  : (programs.isNotEmpty ? programs.first : null);
+
+              final weekIdx = (activeState?.currentWeek ?? 1) - 1;
+              final dayIdx = (activeState?.currentDay ?? 1) - 1;
+
+              final week = program?.weeks.isNotEmpty == true
+                  ? program!.weeks[weekIdx.clamp(0, program.weeks.length - 1)]
                   : null;
+              final day = week?.days.isNotEmpty == true
+                  ? week!.days[dayIdx.clamp(0, week.days.length - 1)]
+                  : null;
+
+              if (program == null) {
+                return Column(
+                  children: [
+                    Text(
+                      'No Program Selected',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => context.go(AppRoutes.programs),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: AppColors.primary,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          'Browse Programs',
+                          style: GoogleFonts.rajdhani(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    program?.name ?? 'No Program Selected',
+                    program.name,
                     style: GoogleFonts.rajdhani(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -498,10 +658,10 @@ class _TodayWorkoutCard extends ConsumerWidget {
                   Text(
                     day?.isRestDay == true
                         ? '😴 Rest Day'
-                        : '${day?.exercises.length ?? 0} exercises • Week 1 Day 1',
+                        : '${day?.exercises.length ?? 0} exercises • Week ${(activeState?.currentWeek ?? 1)} Day ${(activeState?.currentDay ?? 1)}',
                     style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: Colors.white.withOpacity(0.7),
+                      color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -514,7 +674,7 @@ class _TodayWorkoutCard extends ConsumerWidget {
                               extra: {
                                 'workoutName': day?.name ?? 'Workout',
                                 'exercises': day?.exercises ?? [],
-                                'planId': program?.id ?? '',
+                                'planId': program.id,
                               }),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

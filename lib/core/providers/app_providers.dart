@@ -466,3 +466,131 @@ final themeProvider =
     StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
   return ThemeNotifier(ref.watch(sharedPreferencesProvider));
 });
+
+// ─────────────────────────────────────────
+// WORKOUT HISTORY
+// ─────────────────────────────────────────
+
+final workoutHistoryProvider =
+    FutureProvider<List<WorkoutSession>>((ref) async {
+  final database = ref.watch(appDatabaseProvider);
+  final rows = await (database.select(database.workoutSessions)
+        ..where((t) => t.isCompleted.equals(true))
+        ..orderBy([(t) => OrderingTerm.desc(t.startTime)])
+        ..limit(50))
+      .get();
+
+  return rows.map((r) {
+    final logs = (jsonDecode(r.exerciseLogs) as List<dynamic>)
+        .map((l) => ExerciseLog.fromJson(l as Map<String, dynamic>))
+        .toList();
+    return WorkoutSession(
+      id: r.id,
+      workoutPlanId: r.workoutPlanId,
+      workoutName: r.workoutName,
+      startTime: r.startTime,
+      endTime: r.endTime,
+      exerciseLogs: logs,
+      isCompleted: r.isCompleted,
+    );
+  }).toList();
+});
+
+/// Workouts completed in the current calendar week (Mon–Sun)
+final weeklyWorkoutsProvider = FutureProvider<int>((ref) async {
+  final database = ref.watch(appDatabaseProvider);
+  final now = DateTime.now();
+  final weekday = now.weekday; // 1 = Monday
+  final startOfWeek = DateTime(now.year, now.month, now.day - (weekday - 1));
+  final endOfWeek = startOfWeek.add(const Duration(days: 7));
+
+  final rows = await (database.select(database.workoutSessions)
+        ..where((t) =>
+            t.isCompleted.equals(true) &
+            t.startTime.isBetweenValues(startOfWeek, endOfWeek)))
+      .get();
+  return rows.length;
+});
+
+// ─────────────────────────────────────────
+// ACTIVE PROGRAM
+// ─────────────────────────────────────────
+
+const _kActiveProgramId = 'active_program_id';
+const _kActiveProgramWeek = 'active_program_week';
+const _kActiveProgramDay = 'active_program_day';
+
+class ActiveProgramNotifier extends StateNotifier<AsyncValue<ActiveProgramState?>> {
+  final SharedPreferences _prefs;
+
+  ActiveProgramNotifier(this._prefs) : super(const AsyncValue.loading()) {
+    _load();
+  }
+
+  void _load() {
+    final programId = _prefs.getString(_kActiveProgramId);
+    if (programId == null) {
+      state = const AsyncValue.data(null);
+      return;
+    }
+    state = AsyncValue.data(ActiveProgramState(
+      programId: programId,
+      currentWeek: _prefs.getInt(_kActiveProgramWeek) ?? 1,
+      currentDay: _prefs.getInt(_kActiveProgramDay) ?? 1,
+    ));
+  }
+
+  Future<void> activate(String programId) async {
+    await _prefs.setString(_kActiveProgramId, programId);
+    await _prefs.setInt(_kActiveProgramWeek, 1);
+    await _prefs.setInt(_kActiveProgramDay, 1);
+    state = AsyncValue.data(ActiveProgramState(
+      programId: programId,
+      currentWeek: 1,
+      currentDay: 1,
+    ));
+  }
+
+  Future<void> advanceDay(int totalDaysInWeek, int totalWeeks) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+    int newDay = current.currentDay + 1;
+    int newWeek = current.currentWeek;
+    if (newDay > totalDaysInWeek) {
+      newDay = 1;
+      newWeek = (newWeek + 1).clamp(1, totalWeeks);
+    }
+    await _prefs.setInt(_kActiveProgramWeek, newWeek);
+    await _prefs.setInt(_kActiveProgramDay, newDay);
+    state = AsyncValue.data(ActiveProgramState(
+      programId: current.programId,
+      currentWeek: newWeek,
+      currentDay: newDay,
+    ));
+  }
+
+  Future<void> deactivate() async {
+    await _prefs.remove(_kActiveProgramId);
+    await _prefs.remove(_kActiveProgramWeek);
+    await _prefs.remove(_kActiveProgramDay);
+    state = const AsyncValue.data(null);
+  }
+}
+
+class ActiveProgramState {
+  final String programId;
+  final int currentWeek;
+  final int currentDay;
+
+  const ActiveProgramState({
+    required this.programId,
+    required this.currentWeek,
+    required this.currentDay,
+  });
+}
+
+final activeProgramProvider = StateNotifierProvider<ActiveProgramNotifier,
+    AsyncValue<ActiveProgramState?>>((ref) {
+  return ActiveProgramNotifier(ref.watch(sharedPreferencesProvider));
+});
+

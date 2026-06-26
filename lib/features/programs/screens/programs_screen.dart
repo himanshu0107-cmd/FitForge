@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
@@ -14,6 +13,7 @@ class ProgramsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final programsAsync = ref.watch(programsProvider);
+    final activeProgramAsync = ref.watch(activeProgramProvider);
 
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
@@ -33,11 +33,26 @@ class ProgramsScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 80),
           itemCount: programs.length,
           separatorBuilder: (_, __) => const SizedBox(height: 16),
-          itemBuilder: (context, i) => ProgramCard(
-            program: programs[i],
-            onTap: () =>
-                context.push('/programs/${programs[i].id}', extra: programs[i]),
-          ),
+          itemBuilder: (context, i) {
+            final isActive = activeProgramAsync.valueOrNull?.programId == programs[i].id;
+            return ProgramCard(
+              program: programs[i],
+              isActive: isActive,
+              onTap: () => context.push('/programs/${programs[i].id}', extra: programs[i]),
+              onActivate: () async {
+                await ref.read(activeProgramProvider.notifier).activate(programs[i].id);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${programs[i].name} set as active program! 🔥'),
+                      backgroundColor: AppColors.primary,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
+            );
+          },
         ),
         loading: () => const Center(
             child: CircularProgressIndicator(color: AppColors.primary)),
@@ -53,11 +68,15 @@ class ProgramsScreen extends ConsumerWidget {
 class ProgramCard extends StatelessWidget {
   final TrainingProgram program;
   final VoidCallback onTap;
+  final bool isActive;
+  final VoidCallback? onActivate;
 
   const ProgramCard({
     super.key,
     required this.program,
     required this.onTap,
+    this.isActive = false,
+    this.onActivate,
   });
 
   Color get _sportColor {
@@ -94,11 +113,24 @@ class ProgramCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: AppColors.darkCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(
+            color: isActive ? _sportColor : AppColors.darkBorder,
+            width: isActive ? 2 : 1,
+          ),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: _sportColor.withValues(alpha: 0.2),
+                    blurRadius: 16,
+                    spreadRadius: 2,
+                  )
+                ]
+              : [],
         ),
         clipBehavior: Clip.hardEdge,
         child: Column(
@@ -127,6 +159,36 @@ class ProgramCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 100),
                     ),
                   ),
+                  if (isActive)
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: _sportColor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.play_arrow,
+                                size: 12, color: Colors.white),
+                            const SizedBox(width: 4),
+                            Text(
+                              'ACTIVE',
+                              style: GoogleFonts.rajdhani(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -198,24 +260,47 @@ class ProgramCard extends StatelessWidget {
                         color: AppColors.textSecondary,
                       ),
                       const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: _sportColor.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: _sportColor.withValues(alpha: 0.3)),
-                        ),
-                        child: Text(
-                          'View Plan',
-                          style: GoogleFonts.rajdhani(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: _sportColor,
+                      if (!isActive && onActivate != null)
+                        GestureDetector(
+                          onTap: onActivate,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 7),
+                            decoration: BoxDecoration(
+                              color: _sportColor.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: _sportColor.withValues(alpha: 0.3)),
+                            ),
+                            child: Text(
+                              'Activate',
+                              style: GoogleFonts.rajdhani(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: _sportColor,
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: _sportColor.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: _sportColor.withValues(alpha: 0.3)),
+                          ),
+                          child: Text(
+                            'View Plan',
+                            style: GoogleFonts.rajdhani(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: _sportColor,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ],

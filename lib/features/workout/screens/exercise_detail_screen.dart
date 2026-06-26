@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/exercise.dart';
-import 'package:fitforge/features/workout/screens/exercise_library_screen.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
 
 class ExerciseDetailScreen extends ConsumerWidget {

@@ -14,6 +14,7 @@ import 'package:fitforge/features/programs/screens/programs_screen.dart';
 import 'package:fitforge/features/programs/screens/program_detail_screen.dart';
 import 'package:fitforge/features/profile/screens/profile_screen.dart';
 import 'package:fitforge/features/shell/main_shell.dart';
+import 'package:fitforge/features/shell/splash_screen.dart';
 import 'package:fitforge/domain/models/workout.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -21,9 +22,15 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRoutes.onboarding,
-  debugLogDiagnostics: true,
+  initialLocation: AppRoutes.splash,
+  debugLogDiagnostics: false,
   routes: [
+    // Splash — checks onboarding and redirects
+    GoRoute(
+      path: AppRoutes.splash,
+      builder: (context, state) => const SplashScreen(),
+    ),
+
     // Onboarding — full screen
     GoRoute(
       path: AppRoutes.onboarding,
