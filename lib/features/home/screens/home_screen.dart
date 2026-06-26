@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
@@ -396,7 +397,7 @@ class _QuickStartRow extends StatelessWidget {
 }
 
 class _QuickButton extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final LinearGradient gradient;
   final VoidCallback onTap;

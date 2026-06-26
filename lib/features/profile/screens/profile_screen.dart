@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
@@ -320,7 +321,7 @@ class _StatCard2 extends StatelessWidget {
 }
 
 class _TargetRow extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final String value;
   final Color color;
@@ -380,7 +381,7 @@ class _TargetRow extends StatelessWidget {
 }
 
 class _SettingRow extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final String value;
 
@@ -428,7 +429,7 @@ class _SettingRow extends StatelessWidget {
 }
 
 class _SwitchRow extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;

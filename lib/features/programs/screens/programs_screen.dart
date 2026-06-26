@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
@@ -228,7 +229,7 @@ class ProgramCard extends StatelessWidget {
 }
 
 class _ProgramStat extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String value;
   final Color color;
 

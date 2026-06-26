@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/src/icon_data.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 
 class MainShell extends StatelessWidget {
@@ -69,7 +70,7 @@ class MainShell extends StatelessWidget {
 }
 
 class _NavTab {
-  final IconData icon;
+  final FaIconData icon;
   final String label;
   final String path;
   const _NavTab({required this.icon, required this.label, required this.path});
