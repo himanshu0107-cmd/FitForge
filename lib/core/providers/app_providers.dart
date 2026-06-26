@@ -659,3 +659,52 @@ final activeProgramProvider = StateNotifierProvider<ActiveProgramNotifier,
   return ActiveProgramNotifier(ref.watch(sharedPreferencesProvider));
 });
 
+// ─────────────────────────────────────────
+// CUSTOM WORKOUTS
+// ─────────────────────────────────────────
+
+class CustomWorkoutsNotifier extends StateNotifier<List<WorkoutPlan>> {
+  final SharedPreferences _prefs;
+  static const _kCustomWorkoutsKey = 'custom_workouts_list';
+
+  CustomWorkoutsNotifier(this._prefs) : super([]) {
+    _load();
+  }
+
+  void _load() {
+    final list = _prefs.getStringList(_kCustomWorkoutsKey);
+    if (list != null) {
+      state = list
+          .map((item) => WorkoutPlan.fromJson(jsonDecode(item) as Map<String, dynamic>))
+          .toList();
+    }
+  }
+
+  Future<void> saveWorkout(WorkoutPlan plan) async {
+    final existing = [...state];
+    final index = existing.indexWhere((w) => w.id == plan.id);
+    if (index >= 0) {
+      existing[index] = plan;
+    } else {
+      existing.add(plan);
+    }
+    state = existing;
+    await _save();
+  }
+
+  Future<void> deleteWorkout(String id) async {
+    state = state.where((w) => w.id != id).toList();
+    await _save();
+  }
+
+  Future<void> _save() async {
+    final list = state.map((w) => jsonEncode(w.toJson())).toList();
+    await _prefs.setStringList(_kCustomWorkoutsKey, list);
+  }
+}
+
+final customWorkoutsProvider =
+    StateNotifierProvider<CustomWorkoutsNotifier, List<WorkoutPlan>>((ref) {
+  return CustomWorkoutsNotifier(ref.watch(sharedPreferencesProvider));
+});
+

@@ -7,6 +7,7 @@ import 'package:fitforge/features/workout/screens/exercise_library_screen.dart';
 import 'package:fitforge/features/workout/screens/exercise_detail_screen.dart';
 import 'package:fitforge/features/workout/screens/workout_session_screen.dart';
 import 'package:fitforge/features/workout/screens/workout_summary_screen.dart';
+import 'package:fitforge/features/workout/screens/custom_workout_creator_screen.dart';
 import 'package:fitforge/features/timer/screens/timer_hub_screen.dart';
 import 'package:fitforge/features/diet/screens/diet_screen.dart';
 import 'package:fitforge/features/progress/screens/progress_screen.dart';
@@ -120,6 +121,14 @@ final appRouter = GoRouter(
       builder: (context, state) => ProgramDetailScreen(
         programId: state.pathParameters['id']!,
       ),
+    ),
+    GoRoute(
+      path: AppRoutes.workoutCreate,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final plan = state.extra as WorkoutPlan?;
+        return CustomWorkoutCreatorScreen(workoutPlan: plan);
+      },
     ),
     GoRoute(
       path: AppRoutes.profile,

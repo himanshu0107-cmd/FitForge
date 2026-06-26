@@ -56,5 +56,6 @@ class AppRoutes {
   static const progress = '/progress';
   static const programs = '/programs';
   static const programDetail = '/programs/:id';
+  static const workoutCreate = '/workout/create';
   static const profile = '/profile';
 }

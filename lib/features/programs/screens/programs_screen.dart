@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fitforge/core/constants/app_constants.dart';
+import 'package:fitforge/domain/models/workout.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
@@ -65,6 +67,7 @@ class ProgramsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final programsAsync = ref.watch(programsProvider);
     final activeProgramAsync = ref.watch(activeProgramProvider);
+    final customWorkouts = ref.watch(customWorkoutsProvider);
 
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
@@ -132,6 +135,82 @@ class ProgramsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 28),
                     ],
+
+                    // Custom Workouts section
+                    const _SectionLabel(label: 'MY CUSTOM ROUTINES'),
+                    const SizedBox(height: 10),
+                    if (customWorkouts.isEmpty)
+                      _CreateRoutinePlaceholderCard(
+                        onTap: () => context.push(AppRoutes.workoutCreate),
+                      )
+                    else ...[
+                      ...customWorkouts.map((plan) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: _CustomWorkoutCard(
+                            plan: plan,
+                            onTap: () => context.push(AppRoutes.workoutSession, extra: {
+                              'workoutName': plan.name,
+                              'exercises': plan.days.first.exercises,
+                              'planId': plan.id,
+                            }),
+                            onEdit: () => context.push(AppRoutes.workoutCreate, extra: plan),
+                            onDelete: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor: AppColors.darkCard,
+                                  title: Text(
+                                    'Delete Routine',
+                                    style: GoogleFonts.rajdhani(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'Are you sure you want to delete "${plan.name}"?',
+                                    style: GoogleFonts.inter(
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        'Cancel',
+                                        style: GoogleFonts.rajdhani(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textMuted,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        ref
+                                            .read(customWorkoutsProvider.notifier)
+                                            .deleteWorkout(plan.id);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'Delete',
+                                        style: GoogleFonts.rajdhani(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.error,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }),
+                      _CreateRoutineTriggerButton(
+                        onTap: () => context.push(AppRoutes.workoutCreate),
+                      ),
+                    ],
+                    const SizedBox(height: 28),
 
                     // All programs
                     _SectionLabel(
@@ -739,6 +818,296 @@ class _ProgramStat extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// CUSTOM ROUTINE PLACEHOLDER CARD
+// ─────────────────────────────────────────
+class _CreateRoutinePlaceholderCard extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _CreateRoutinePlaceholderCard({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return _PressScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+        decoration: BoxDecoration(
+          color: AppColors.darkCard.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.darkBorder, style: BorderStyle.solid),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const FaIcon(
+                FontAwesomeIcons.plus,
+                color: AppColors.primary,
+                size: 16,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Design Custom Routine',
+              style: GoogleFonts.rajdhani(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Create a tailored workout by choosing your own exercises, set targets, rep count, and rest periods.',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.textMuted,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// CUSTOM WORKOUT CARD
+// ─────────────────────────────────────────
+class _CustomWorkoutCard extends StatelessWidget {
+  final WorkoutPlan plan;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _CustomWorkoutCard({
+    required this.plan,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final exercises = plan.days.first.exercises;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.darkBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'CUSTOM ROUTINE',
+                        style: GoogleFonts.inter(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        plan.name,
+                        style: GoogleFonts.rajdhani(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.penToSquare,
+                      color: AppColors.textSecondary, size: 16),
+                  onPressed: onEdit,
+                ),
+                IconButton(
+                  icon: const FaIcon(FontAwesomeIcons.trashCan,
+                      color: AppColors.error, size: 16),
+                  onPressed: onDelete,
+                ),
+              ],
+            ),
+          ),
+          
+          if (plan.description.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+              child: Text(
+                plan.description,
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: AppColors.textSecondary,
+                  height: 1.3,
+                ),
+              ),
+            ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'EXERCISES',
+                  style: GoogleFonts.inter(
+                    fontSize: 9,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textMuted,
+                    letterSpacing: 1,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: exercises
+                      .take(4)
+                      .map((e) => Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: AppColors.darkBorder.withValues(alpha: 0.4),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColors.darkBorder),
+                            ),
+                            child: Text(
+                              '${e.sets}x ${e.exerciseName}',
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ))
+                      .toList()
+                    ..addAll(
+                      exercises.length > 4
+                          ? [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: AppColors.darkBorder.withValues(alpha: 0.4),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: AppColors.darkBorder),
+                                ),
+                                child: Text(
+                                  '+${exercises.length - 4} more',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 11,
+                                    color: AppColors.textMuted,
+                                  ),
+                                ),
+                              )
+                            ]
+                          : [],
+                    ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: AppGradients.primaryGradient,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: AppShadows.glow(AppColors.primary, intensity: 0.3),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: onTap,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const FaIcon(FontAwesomeIcons.play, size: 12),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Start Routine',
+                            style: GoogleFonts.rajdhani(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────
+// CREATE ROUTINE TRIGGER BUTTON
+// ─────────────────────────────────────────
+class _CreateRoutineTriggerButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _CreateRoutineTriggerButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return _PressScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: AppColors.darkCard,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.darkBorder),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const FaIcon(FontAwesomeIcons.plus, color: AppColors.primary, size: 12),
+            const SizedBox(width: 8),
+            Text(
+              'Create Custom Routine',
+              style: GoogleFonts.rajdhani(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
