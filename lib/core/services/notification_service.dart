@@ -161,7 +161,6 @@ class NotificationService {
 
     final now = tz.TZDateTime.now(tz.local);
     // Schedule from 8am to 10pm every 2 hours
-    final startHour = 8;
     final hours = [8, 10, 12, 14, 16, 18, 20, 22];
 
     for (int i = 0; i < hours.length; i++) {

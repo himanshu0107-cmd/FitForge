@@ -19,20 +19,38 @@ class ProgramsScreen extends ConsumerWidget {
       backgroundColor: AppColors.darkBackground,
       appBar: AppBar(
         backgroundColor: AppColors.darkBackground,
-        title: Text(
-          'Training Programs',
-          style: GoogleFonts.rajdhani(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+        scrolledUnderElevation: 0,
+        title: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: AppGradients.primaryGradient,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: AppShadows.glow(AppColors.primary, intensity: 0.4),
+              ),
+              child: const Center(
+                  child: Text('🏆', style: TextStyle(fontSize: 15))),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Programs',
+              style: GoogleFonts.rajdhani(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ],
         ),
       ),
       body: programsAsync.when(
         data: (programs) => ListView.separated(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 80),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
           itemCount: programs.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 16),
+          separatorBuilder: (_, __) => const SizedBox(height: 14),
           itemBuilder: (context, i) {
             final isActive = activeProgramAsync.valueOrNull?.programId == programs[i].id;
             return ProgramCard(
@@ -44,9 +62,12 @@ class ProgramsScreen extends ConsumerWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${programs[i].name} set as active program! 🔥'),
+                      content: Text('${programs[i].name} activated! 🔥'),
                       backgroundColor: AppColors.primary,
                       behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 100),
                     ),
                   );
                 }
@@ -57,7 +78,7 @@ class ProgramsScreen extends ConsumerWidget {
         loading: () => const Center(
             child: CircularProgressIndicator(color: AppColors.primary)),
         error: (e, _) => Center(
-          child: Text('Error loading programs: $e',
+          child: Text('Error: $e',
               style: const TextStyle(color: AppColors.textSecondary)),
         ),
       ),

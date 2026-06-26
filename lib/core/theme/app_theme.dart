@@ -2,54 +2,248 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  // Brand
-  static const primary = Color(0xFFE8330A);
-  static const accent = Color(0xFFFF6B35);
-  static const accentLight = Color(0xFFFF8C5A);
+  // Brand — deeper, richer orange
+  static const primary = Color(0xFFFF4D1A);
+  static const primaryDark = Color(0xFFCC3300);
+  static const accent = Color(0xFFFF7A45);
+  static const accentLight = Color(0xFFFFAA80);
 
-  // Dark Theme
-  static const darkBackground = Color(0xFF0F0F1A);
-  static const darkCard = Color(0xFF1A1A2E);
-  static const darkSurface = Color(0xFF242438);
-  static const darkBorder = Color(0xFF2E2E4A);
-  static const darkDivider = Color(0xFF1E1E32);
+  // Deep dark palette — true depth layering
+  static const darkBackground = Color(0xFF080B14);
+  static const darkCard = Color(0xFF0E1422);
+  static const darkSurface = Color(0xFF141A2E);
+  static const darkElevated = Color(0xFF1A2138);
+  static const darkBorder = Color(0xFF1E2640);
+  static const darkBorderBright = Color(0xFF2A3560);
+  static const darkDivider = Color(0xFF111828);
 
   // Light Theme
-  static const lightBackground = Color(0xFFF5F5FA);
+  static const lightBackground = Color(0xFFF2F4F8);
   static const lightCard = Color(0xFFFFFFFF);
-  static const lightSurface = Color(0xFFF0F0F8);
+  static const lightSurface = Color(0xFFEEF0F7);
 
   // Text
-  static const textPrimary = Color(0xFFFFFFFF);
-  static const textSecondary = Color(0xFFB0B0CC);
-  static const textMuted = Color(0xFF6B6B8A);
-  static const textDark = Color(0xFF1A1A2E);
+  static const textPrimary = Color(0xFFF0F4FF);
+  static const textSecondary = Color(0xFF8898BB);
+  static const textMuted = Color(0xFF4A5578);
+  static const textDark = Color(0xFF0E1422);
 
   // Status
-  static const success = Color(0xFF00C853);
-  static const warning = Color(0xFFFFD600);
-  static const error = Color(0xFFFF1744);
-  static const info = Color(0xFF2979FF);
+  static const success = Color(0xFF00E676);
+  static const successDim = Color(0xFF00C853);
+  static const warning = Color(0xFFFFAB40);
+  static const warningDim = Color(0xFFFF8F00);
+  static const error = Color(0xFFFF3D71);
+  static const info = Color(0xFF4D8FFF);
+  static const infoDim = Color(0xFF2979FF);
 
   // Timer
-  static const timerWork = Color(0xFF00C853);
-  static const timerRest = Color(0xFFFF1744);
+  static const timerWork = Color(0xFF00E676);
+  static const timerRest = Color(0xFFFF3D71);
 
   // Chart
-  static const chartLine = Color(0xFFE8330A);
-  static const chartFill = Color(0x33E8330A);
-  static const chartGrid = Color(0xFF2E2E4A);
+  static const chartLine = Color(0xFFFF4D1A);
+  static const chartFill = Color(0x33FF4D1A);
+  static const chartGrid = Color(0xFF1A2138);
 
   // Muscle Group Colors
-  static const chest = Color(0xFFE8330A);
-  static const back = Color(0xFF2979FF);
-  static const legs = Color(0xFF00C853);
-  static const shoulders = Color(0xFFFFD600);
-  static const arms = Color(0xFFFF6B35);
-  static const core = Color(0xFF7B1FA2);
-  static const cardio = Color(0xFF00BCD4);
+  static const chest = Color(0xFFFF4D1A);
+  static const back = Color(0xFF4D8FFF);
+  static const legs = Color(0xFF00E676);
+  static const shoulders = Color(0xFFFFAB40);
+  static const arms = Color(0xFFFF7A45);
+  static const core = Color(0xFFAB47BC);
+  static const cardio = Color(0xFF00E5FF);
+
+  // Glass / overlay
+  static const glassWhite = Color(0x0FFFFFFF);
+  static const glassBorder = Color(0x1AFFFFFF);
+  static const glassHighlight = Color(0x08FFFFFF);
 }
 
+// ─────────────────────────────────────────
+// SHADOWS
+// ─────────────────────────────────────────
+class AppShadows {
+  static List<BoxShadow> get card => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.4),
+          blurRadius: 24,
+          offset: const Offset(0, 8),
+        ),
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.2),
+          blurRadius: 4,
+          offset: const Offset(0, 1),
+        ),
+      ];
+
+  static List<BoxShadow> glow(Color color, {double intensity = 0.35}) => [
+        BoxShadow(
+          color: color.withValues(alpha: intensity),
+          blurRadius: 24,
+          spreadRadius: 0,
+          offset: const Offset(0, 4),
+        ),
+        BoxShadow(
+          color: color.withValues(alpha: intensity * 0.5),
+          blurRadius: 48,
+          spreadRadius: 0,
+          offset: const Offset(0, 8),
+        ),
+      ];
+
+  static List<BoxShadow> get elevated => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.6),
+          blurRadius: 40,
+          offset: const Offset(0, 16),
+        ),
+      ];
+
+  static List<BoxShadow> get navBar => [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.5),
+          blurRadius: 32,
+          offset: const Offset(0, -8),
+        ),
+        BoxShadow(
+          color: AppColors.primary.withValues(alpha: 0.08),
+          blurRadius: 48,
+          offset: const Offset(0, -4),
+        ),
+      ];
+}
+
+// ─────────────────────────────────────────
+// GRADIENTS
+// ─────────────────────────────────────────
+class AppGradients {
+  static const primaryGradient = LinearGradient(
+    colors: [Color(0xFFFF4D1A), Color(0xFFFF2D55)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const primarySoft = LinearGradient(
+    colors: [Color(0xFFFF4D1A), Color(0xFFFF7A45)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const backgroundMesh = LinearGradient(
+    colors: [Color(0xFF080B14), Color(0xFF0A0F1E)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const heroOverlay = LinearGradient(
+    colors: [Color(0x00080B14), Color(0xFF080B14)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0.4, 1.0],
+  );
+
+  static const cardSheen = LinearGradient(
+    colors: [Color(0x12FFFFFF), Color(0x00FFFFFF)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static LinearGradient get timerWork => const LinearGradient(
+        colors: [Color(0xFF00E676), Color(0xFF00BFA5)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+
+  static LinearGradient get timerRest => const LinearGradient(
+        colors: [Color(0xFFFF3D71), Color(0xFFFF4D1A)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+
+  static LinearGradient muscleGradient(Color color) => LinearGradient(
+        colors: [color.withValues(alpha: 0.9), color.withValues(alpha: 0.5)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+
+  static const darkCardGradient = LinearGradient(
+    colors: [Color(0xFF0E1422), Color(0xFF141A2E)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+}
+
+// ─────────────────────────────────────────
+// DECORATIONS
+// ─────────────────────────────────────────
+class AppDecorations {
+  static BoxDecoration get card => BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.darkBorder, width: 1),
+        boxShadow: AppShadows.card,
+      );
+
+  static BoxDecoration get surfaceCard => BoxDecoration(
+        color: AppColors.darkSurface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.darkBorder, width: 1),
+      );
+
+  static BoxDecoration get glassCard => BoxDecoration(
+        color: AppColors.glassWhite,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.glassBorder, width: 1),
+        boxShadow: AppShadows.elevated,
+      );
+
+  static BoxDecoration get primaryCard => BoxDecoration(
+        gradient: AppGradients.primaryGradient,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppShadows.glow(AppColors.primary),
+      );
+
+  static BoxDecoration glowCard(Color color) => BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: color.withValues(alpha: 0.35),
+          width: 1,
+        ),
+        boxShadow: [
+          ...AppShadows.card,
+          BoxShadow(
+            color: color.withValues(alpha: 0.12),
+            blurRadius: 24,
+            spreadRadius: 0,
+          ),
+        ],
+      );
+
+  static BoxDecoration sheenCard({
+    Color? color,
+    double radius = 20,
+  }) =>
+      BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            (color ?? AppColors.darkCard).withValues(alpha: 1.0),
+            AppColors.darkSurface,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: AppColors.darkBorder, width: 1),
+        boxShadow: AppShadows.card,
+      );
+}
+
+// ─────────────────────────────────────────
+// THEME
+// ─────────────────────────────────────────
 class AppTheme {
   static ThemeData get dark => _buildTheme(isDark: true);
   static ThemeData get light => _buildTheme(isDark: false);
@@ -67,8 +261,7 @@ class AppTheme {
       cardColor: isDark ? AppColors.darkCard : AppColors.lightCard,
       dividerColor: isDark ? AppColors.darkDivider : Colors.grey.shade200,
       appBarTheme: AppBarTheme(
-        backgroundColor:
-            isDark ? AppColors.darkBackground : AppColors.lightBackground,
+        backgroundColor: Colors.transparent,
         foregroundColor:
             isDark ? AppColors.textPrimary : AppColors.textDark,
         elevation: 0,
@@ -81,18 +274,9 @@ class AppTheme {
           letterSpacing: 0.5,
         ),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textMuted,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
-        indicatorColor: AppColors.primary.withOpacity(0.15),
+        indicatorColor: AppColors.primary.withValues(alpha: 0.15),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: AppColors.primary);
@@ -117,7 +301,7 @@ class AppTheme {
         color: isDark ? AppColors.darkCard : AppColors.lightCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           side: BorderSide(
             color: isDark ? AppColors.darkBorder : Colors.grey.shade200,
             width: 1,
@@ -132,7 +316,7 @@ class AppTheme {
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
           textStyle: GoogleFonts.rajdhani(
             fontSize: 16,
@@ -147,7 +331,7 @@ class AppTheme {
           side: const BorderSide(color: AppColors.primary, width: 1.5),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(14),
           ),
           textStyle: GoogleFonts.rajdhani(
             fontSize: 16,
@@ -169,26 +353,26 @@ class AppTheme {
         filled: true,
         fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(
             color: isDark ? AppColors.darkBorder : Colors.grey.shade300,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         hintStyle: GoogleFonts.inter(
           color: AppColors.textMuted,
           fontSize: 14,
@@ -201,21 +385,23 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor:
             isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        selectedColor: AppColors.primary.withOpacity(0.2),
+        selectedColor: AppColors.primary.withValues(alpha: 0.2),
         side: BorderSide(
           color: isDark ? AppColors.darkBorder : Colors.grey.shade300,
         ),
-        labelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        labelStyle:
+            GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       ),
       tabBarTheme: TabBarThemeData(
-        indicator: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: AppColors.primary, width: 2.5),
-          ),
+        indicator: BoxDecoration(
+          gradient: AppGradients.primaryGradient,
+          borderRadius: BorderRadius.circular(8),
         ),
-        labelColor: AppColors.primary,
+        indicatorSize: TabBarIndicatorSize.tab,
+        labelColor: Colors.white,
         unselectedLabelColor: AppColors.textMuted,
         labelStyle: GoogleFonts.rajdhani(
           fontSize: 14,
@@ -235,7 +421,7 @@ class AppTheme {
         activeTrackColor: AppColors.primary,
         thumbColor: AppColors.primary,
         inactiveTrackColor: AppColors.darkBorder,
-        overlayColor: AppColors.primary.withOpacity(0.1),
+        overlayColor: AppColors.primary.withValues(alpha: 0.1),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
@@ -244,20 +430,21 @@ class AppTheme {
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return AppColors.primary.withOpacity(0.4);
+            return AppColors.primary.withValues(alpha: 0.4);
           }
-          return Colors.grey.withOpacity(0.3);
+          return Colors.grey.withValues(alpha: 0.3);
         }),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: isDark ? AppColors.darkCard : AppColors.lightCard,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         elevation: 8,
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: isDark ? AppColors.darkSurface : Colors.grey.shade900,
+        backgroundColor: isDark ? AppColors.darkElevated : Colors.grey.shade900,
         contentTextStyle: GoogleFonts.inter(color: Colors.white),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -288,11 +475,12 @@ class AppTheme {
       );
 
   static TextTheme _buildTextTheme({required bool isDark}) {
-    final baseColor = isDark ? AppColors.textPrimary : AppColors.textDark;
-    final secondaryColor = isDark ? AppColors.textSecondary : Colors.grey.shade600;
+    final baseColor =
+        isDark ? AppColors.textPrimary : AppColors.textDark;
+    final secondaryColor =
+        isDark ? AppColors.textSecondary : Colors.grey.shade600;
 
     return TextTheme(
-      // Display — Rajdhani
       displayLarge: GoogleFonts.rajdhani(
         fontSize: 57,
         fontWeight: FontWeight.w700,
@@ -309,7 +497,6 @@ class AppTheme {
         fontWeight: FontWeight.w700,
         color: baseColor,
       ),
-      // Headline — Rajdhani
       headlineLarge: GoogleFonts.rajdhani(
         fontSize: 32,
         fontWeight: FontWeight.w700,
@@ -328,7 +515,6 @@ class AppTheme {
         color: baseColor,
         letterSpacing: 0.2,
       ),
-      // Title — Rajdhani
       titleLarge: GoogleFonts.rajdhani(
         fontSize: 22,
         fontWeight: FontWeight.w700,
@@ -347,7 +533,6 @@ class AppTheme {
         color: baseColor,
         letterSpacing: 0.4,
       ),
-      // Body — Inter
       bodyLarge: GoogleFonts.inter(
         fontSize: 16,
         fontWeight: FontWeight.w400,
@@ -363,7 +548,6 @@ class AppTheme {
         fontWeight: FontWeight.w400,
         color: secondaryColor,
       ),
-      // Label — Inter
       labelLarge: GoogleFonts.inter(
         fontSize: 14,
         fontWeight: FontWeight.w600,
@@ -384,65 +568,4 @@ class AppTheme {
       ),
     );
   }
-}
-
-// Gradient utilities
-class AppGradients {
-  static const primaryGradient = LinearGradient(
-    colors: [AppColors.primary, AppColors.accent],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const darkCardGradient = LinearGradient(
-    colors: [AppColors.darkCard, AppColors.darkSurface],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
-
-  static const heroGradient = LinearGradient(
-    colors: [Color(0xFF0F0F1A), Color(0x00000000)],
-    begin: Alignment.bottomCenter,
-    end: Alignment.topCenter,
-  );
-
-  static LinearGradient muscleGradient(Color color) => LinearGradient(
-        colors: [color.withOpacity(0.8), color.withOpacity(0.4)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
-}
-
-// Box decorations
-class AppDecorations {
-  static BoxDecoration get card => BoxDecoration(
-        color: AppColors.darkCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.darkBorder),
-      );
-
-  static BoxDecoration get glassCard => BoxDecoration(
-        color: AppColors.darkCard.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.darkBorder),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      );
-
-  static BoxDecoration get primaryCard => BoxDecoration(
-        gradient: AppGradients.primaryGradient,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      );
 }

@@ -282,7 +282,7 @@ class ExerciseCard extends StatelessWidget {
                   // Gradient overlay
                   Container(
                     decoration: const BoxDecoration(
-                      gradient: AppGradients.heroGradient,
+                      gradient: AppGradients.heroOverlay,
                     ),
                   ),
                   // Equipment badge

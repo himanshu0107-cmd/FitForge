@@ -16,38 +16,83 @@ class ProgressScreen extends ConsumerWidget {
       backgroundColor: AppColors.darkBackground,
       appBar: AppBar(
         backgroundColor: AppColors.darkBackground,
-        title: Text(
-          'Progress',
-          style: GoogleFonts.rajdhani(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
-          ),
+        scrolledUnderElevation: 0,
+        title: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: AppGradients.primaryGradient,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: AppShadows.glow(AppColors.primary, intensity: 0.4),
+              ),
+              child: const Center(
+                  child: Text('📈', style: TextStyle(fontSize: 15))),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Progress',
+              style: GoogleFonts.rajdhani(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ],
         ),
         actions: [
-          IconButton(
-            onPressed: () => _showAddWeightDialog(context, ref),
-            icon: const Icon(Icons.add, color: AppColors.primary),
-            tooltip: 'Log weight',
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: () => _showAddWeightDialog(context, ref),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: AppGradients.primaryGradient,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow:
+                      AppShadows.glow(AppColors.primary, intensity: 0.4),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.add, color: Colors.white, size: 15),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Log Weight',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
       body: RefreshIndicator(
         color: AppColors.primary,
+        backgroundColor: AppColors.darkCard,
         onRefresh: () async {
           ref.invalidate(weightLogProvider);
           ref.invalidate(personalRecordsProvider);
           ref.invalidate(workoutHistoryProvider);
         },
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 80),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           children: [
             const _WeightChartSection(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const _PersonalRecordsSection(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const _WorkoutCalendarSection(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             const _RecentSessionsSection(),
           ],
         ),
@@ -442,7 +487,7 @@ class _PRRow extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.15),
+              color: AppColors.warning.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: const Center(
@@ -584,7 +629,7 @@ class _WorkoutCalendarSection extends ConsumerWidget {
                         color: isActive
                             ? AppColors.primary
                             : isToday
-                                ? AppColors.primary.withOpacity(0.3)
+                                ? AppColors.primary.withValues(alpha: 0.3)
                                 : AppColors.darkSurface,
                         borderRadius: BorderRadius.circular(3),
                         border: isToday
