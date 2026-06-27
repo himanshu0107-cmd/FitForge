@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/providers/workout_provider.dart';
 import '../../../core/providers/progress_provider.dart';
+import '../../../core/providers/program_provider.dart';
 
 class HomeDashboard extends ConsumerWidget {
   const HomeDashboard({super.key});
@@ -13,6 +14,7 @@ class HomeDashboard extends ConsumerWidget {
     final streakAsync = ref.watch(workoutStreakProvider);
     final historyAsync = ref.watch(workoutHistoryProvider);
     final latestWeightAsync = ref.watch(latestWeightProvider);
+    final enrollmentAsync = ref.watch(activeEnrollmentProvider);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -37,6 +39,19 @@ class HomeDashboard extends ConsumerWidget {
           ),
           
           const SizedBox(height: 16),
+          
+          enrollmentAsync.when(
+            data: (enrollment) => enrollment != null
+                ? _ActiveProgramCard(enrollment: enrollment)
+                : const SizedBox.shrink(),
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+          
+          enrollmentAsync.maybeWhen(
+            data: (enrollment) => SizedBox(height: enrollment != null ? 16 : 0),
+            orElse: () => const SizedBox.shrink(),
+          ),
           
           Row(
             children: [
@@ -112,6 +127,83 @@ class HomeDashboard extends ConsumerWidget {
             error: (_, __) => const Center(child: Text('Error loading history')),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ActiveProgramCard extends StatelessWidget {
+  final dynamic enrollment;
+
+  const _ActiveProgramCard({required this.enrollment});
+
+  @override
+  Widget build(BuildContext context) {
+    final startDate = enrollment.startDate as DateTime;
+    final daysSinceStart = DateTime.now().difference(startDate).inDays;
+    final progress = (enrollment.currentWeek as int) / 12.0;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.bookmark, size: 24, color: Colors.green),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Active Program', style: Theme.of(context).textTheme.bodySmall),
+                      const SizedBox(height: 4),
+                      Text(
+                        enrollment.programName as String,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Week ${enrollment.currentWeek}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Day ${enrollment.currentDay}', style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+                Text(
+                  '$daysSinceStart days active',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.green),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: progress.clamp(0.0, 1.0),
+                minHeight: 8,
+                backgroundColor: Colors.grey[300],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

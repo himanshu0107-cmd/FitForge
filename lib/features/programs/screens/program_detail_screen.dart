@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
+import 'package:fitforge/core/providers/program_provider.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
 import 'package:fitforge/domain/models/workout.dart';
 
@@ -667,6 +668,44 @@ class _ProgramDetailContentState extends State<_ProgramDetailContent>
             ),
           ),
         ],
+      ),
+      floatingActionButton: Consumer(
+        builder: (context, ref, _) {
+          final enrollmentAsync = ref.watch(activeEnrollmentProvider);
+          final isEnrolled = enrollmentAsync.value?.programId == widget.program.id;
+
+          return FloatingActionButton.extended(
+            onPressed: () {
+              if (isEnrolled) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Already enrolled in this program!')),
+                );
+              } else {
+                HapticFeedback.mediumImpact();
+                ref.read(programNotifierProvider.notifier).enrollProgram(
+                  programId: widget.program.id,
+                  programName: widget.program.name,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Enrolled in ${widget.program.name}!')),
+                );
+              }
+            },
+            backgroundColor: isEnrolled ? AppColors.success : _color,
+            icon: Icon(
+              isEnrolled ? Icons.check_circle : Icons.add_circle,
+              color: Colors.white,
+            ),
+            label: Text(
+              isEnrolled ? 'Enrolled' : 'Enroll Program',
+              style: GoogleFonts.rajdhani(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

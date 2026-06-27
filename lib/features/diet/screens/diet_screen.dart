@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
 import 'package:fitforge/core/providers/diet_provider.dart';
+import 'package:fitforge/core/providers/water_provider.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
 import 'package:fitforge/core/utils/tdee_calculator.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
@@ -392,6 +393,11 @@ class _TodayTab extends StatelessWidget {
 
             const SizedBox(height: 20),
 
+            // Water tracker
+            _WaterTracker(ref: ref),
+
+            const SizedBox(height: 20),
+
             // Food entries grouped by meal
             if (entries.isEmpty)
               _EmptyFoodLog()
@@ -409,6 +415,135 @@ class _TodayTab extends StatelessWidget {
       loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary)),
       error: (e, _) => Center(child: Text('Error: $e')),
+    );
+  }
+}
+
+class _WaterTracker extends StatelessWidget {
+  final WidgetRef ref;
+  const _WaterTracker({required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    final waterIntakeAsync = ref.watch(todayWaterIntakeProvider);
+    const goal = 3000; // 3L default goal
+
+    return waterIntakeAsync.when(
+      data: (intake) {
+        final progress = (intake / goal).clamp(0.0, 1.0);
+        final glassesCount = (intake / 250).floor();
+        
+        return Container(
+          padding: const EdgeInsets.all(20),
+          decoration: AppDecorations.card,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text('💧', style: TextStyle(fontSize: 20)),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Water Intake',
+                    style: GoogleFonts.rajdhani(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${(intake / 1000).toStringAsFixed(1)}L / ${(goal / 1000).toStringAsFixed(1)}L',
+                    style: GoogleFonts.rajdhani(
+                      fontSize: 16,
+                      color: AppColors.info,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: AppColors.darkSurface,
+                  color: AppColors.info,
+                  minHeight: 8,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _WaterButton(
+                    label: '250ml',
+                    icon: Icons.local_drink,
+                    onTap: () => ref.read(waterNotifierProvider.notifier).logWater(250),
+                  ),
+                  _WaterButton(
+                    label: '500ml',
+                    icon: Icons.water_drop,
+                    onTap: () => ref.read(waterNotifierProvider.notifier).logWater(500),
+                  ),
+                  _WaterButton(
+                    label: '750ml',
+                    icon: Icons.local_cafe,
+                    onTap: () => ref.read(waterNotifierProvider.notifier).logWater(750),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: AppDecorations.card,
+        child: const Center(child: CircularProgressIndicator(color: AppColors.info)),
+      ),
+      error: (_, __) => const SizedBox(),
+    );
+  }
+}
+
+class _WaterButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _WaterButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _PressScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.info.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: AppColors.info, size: 20),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: GoogleFonts.rajdhani(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.info,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

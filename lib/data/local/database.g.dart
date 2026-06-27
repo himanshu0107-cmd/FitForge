@@ -3303,6 +3303,677 @@ class WorkoutStreaksCompanion extends UpdateCompanion<WorkoutStreak> {
   }
 }
 
+class $WaterLogsTable extends WaterLogs
+    with TableInfo<$WaterLogsTable, WaterLog> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WaterLogsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _amountMlMeta =
+      const VerificationMeta('amountMl');
+  @override
+  late final GeneratedColumn<int> amountMl = GeneratedColumn<int>(
+      'amount_ml', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _loggedAtMeta =
+      const VerificationMeta('loggedAt');
+  @override
+  late final GeneratedColumn<DateTime> loggedAt = GeneratedColumn<DateTime>(
+      'logged_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, amountMl, loggedAt];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'water_logs';
+  @override
+  VerificationContext validateIntegrity(Insertable<WaterLog> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('amount_ml')) {
+      context.handle(_amountMlMeta,
+          amountMl.isAcceptableOrUnknown(data['amount_ml']!, _amountMlMeta));
+    } else if (isInserting) {
+      context.missing(_amountMlMeta);
+    }
+    if (data.containsKey('logged_at')) {
+      context.handle(_loggedAtMeta,
+          loggedAt.isAcceptableOrUnknown(data['logged_at']!, _loggedAtMeta));
+    } else if (isInserting) {
+      context.missing(_loggedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WaterLog map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WaterLog(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      amountMl: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}amount_ml'])!,
+      loggedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}logged_at'])!,
+    );
+  }
+
+  @override
+  $WaterLogsTable createAlias(String alias) {
+    return $WaterLogsTable(attachedDatabase, alias);
+  }
+}
+
+class WaterLog extends DataClass implements Insertable<WaterLog> {
+  final String id;
+  final int amountMl;
+  final DateTime loggedAt;
+  const WaterLog(
+      {required this.id, required this.amountMl, required this.loggedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['amount_ml'] = Variable<int>(amountMl);
+    map['logged_at'] = Variable<DateTime>(loggedAt);
+    return map;
+  }
+
+  WaterLogsCompanion toCompanion(bool nullToAbsent) {
+    return WaterLogsCompanion(
+      id: Value(id),
+      amountMl: Value(amountMl),
+      loggedAt: Value(loggedAt),
+    );
+  }
+
+  factory WaterLog.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WaterLog(
+      id: serializer.fromJson<String>(json['id']),
+      amountMl: serializer.fromJson<int>(json['amountMl']),
+      loggedAt: serializer.fromJson<DateTime>(json['loggedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'amountMl': serializer.toJson<int>(amountMl),
+      'loggedAt': serializer.toJson<DateTime>(loggedAt),
+    };
+  }
+
+  WaterLog copyWith({String? id, int? amountMl, DateTime? loggedAt}) =>
+      WaterLog(
+        id: id ?? this.id,
+        amountMl: amountMl ?? this.amountMl,
+        loggedAt: loggedAt ?? this.loggedAt,
+      );
+  WaterLog copyWithCompanion(WaterLogsCompanion data) {
+    return WaterLog(
+      id: data.id.present ? data.id.value : this.id,
+      amountMl: data.amountMl.present ? data.amountMl.value : this.amountMl,
+      loggedAt: data.loggedAt.present ? data.loggedAt.value : this.loggedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WaterLog(')
+          ..write('id: $id, ')
+          ..write('amountMl: $amountMl, ')
+          ..write('loggedAt: $loggedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, amountMl, loggedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WaterLog &&
+          other.id == this.id &&
+          other.amountMl == this.amountMl &&
+          other.loggedAt == this.loggedAt);
+}
+
+class WaterLogsCompanion extends UpdateCompanion<WaterLog> {
+  final Value<String> id;
+  final Value<int> amountMl;
+  final Value<DateTime> loggedAt;
+  final Value<int> rowid;
+  const WaterLogsCompanion({
+    this.id = const Value.absent(),
+    this.amountMl = const Value.absent(),
+    this.loggedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WaterLogsCompanion.insert({
+    required String id,
+    required int amountMl,
+    required DateTime loggedAt,
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        amountMl = Value(amountMl),
+        loggedAt = Value(loggedAt);
+  static Insertable<WaterLog> custom({
+    Expression<String>? id,
+    Expression<int>? amountMl,
+    Expression<DateTime>? loggedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (amountMl != null) 'amount_ml': amountMl,
+      if (loggedAt != null) 'logged_at': loggedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WaterLogsCompanion copyWith(
+      {Value<String>? id,
+      Value<int>? amountMl,
+      Value<DateTime>? loggedAt,
+      Value<int>? rowid}) {
+    return WaterLogsCompanion(
+      id: id ?? this.id,
+      amountMl: amountMl ?? this.amountMl,
+      loggedAt: loggedAt ?? this.loggedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (amountMl.present) {
+      map['amount_ml'] = Variable<int>(amountMl.value);
+    }
+    if (loggedAt.present) {
+      map['logged_at'] = Variable<DateTime>(loggedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WaterLogsCompanion(')
+          ..write('id: $id, ')
+          ..write('amountMl: $amountMl, ')
+          ..write('loggedAt: $loggedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProgramEnrollmentsTable extends ProgramEnrollments
+    with TableInfo<$ProgramEnrollmentsTable, ProgramEnrollment> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProgramEnrollmentsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _programIdMeta =
+      const VerificationMeta('programId');
+  @override
+  late final GeneratedColumn<String> programId = GeneratedColumn<String>(
+      'program_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _programNameMeta =
+      const VerificationMeta('programName');
+  @override
+  late final GeneratedColumn<String> programName = GeneratedColumn<String>(
+      'program_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _startDateMeta =
+      const VerificationMeta('startDate');
+  @override
+  late final GeneratedColumn<DateTime> startDate = GeneratedColumn<DateTime>(
+      'start_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _currentWeekMeta =
+      const VerificationMeta('currentWeek');
+  @override
+  late final GeneratedColumn<int> currentWeek = GeneratedColumn<int>(
+      'current_week', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _currentDayMeta =
+      const VerificationMeta('currentDay');
+  @override
+  late final GeneratedColumn<int> currentDay = GeneratedColumn<int>(
+      'current_day', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  static const VerificationMeta _isActiveMeta =
+      const VerificationMeta('isActive');
+  @override
+  late final GeneratedColumn<bool> isActive = GeneratedColumn<bool>(
+      'is_active', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_active" IN (0, 1))'),
+      defaultValue: const Constant(true));
+  static const VerificationMeta _completedAtMeta =
+      const VerificationMeta('completedAt');
+  @override
+  late final GeneratedColumn<DateTime> completedAt = GeneratedColumn<DateTime>(
+      'completed_at', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        programId,
+        programName,
+        startDate,
+        currentWeek,
+        currentDay,
+        isActive,
+        completedAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'program_enrollments';
+  @override
+  VerificationContext validateIntegrity(Insertable<ProgramEnrollment> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('program_id')) {
+      context.handle(_programIdMeta,
+          programId.isAcceptableOrUnknown(data['program_id']!, _programIdMeta));
+    } else if (isInserting) {
+      context.missing(_programIdMeta);
+    }
+    if (data.containsKey('program_name')) {
+      context.handle(
+          _programNameMeta,
+          programName.isAcceptableOrUnknown(
+              data['program_name']!, _programNameMeta));
+    } else if (isInserting) {
+      context.missing(_programNameMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(_startDateMeta,
+          startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta));
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('current_week')) {
+      context.handle(
+          _currentWeekMeta,
+          currentWeek.isAcceptableOrUnknown(
+              data['current_week']!, _currentWeekMeta));
+    }
+    if (data.containsKey('current_day')) {
+      context.handle(
+          _currentDayMeta,
+          currentDay.isAcceptableOrUnknown(
+              data['current_day']!, _currentDayMeta));
+    }
+    if (data.containsKey('is_active')) {
+      context.handle(_isActiveMeta,
+          isActive.isAcceptableOrUnknown(data['is_active']!, _isActiveMeta));
+    }
+    if (data.containsKey('completed_at')) {
+      context.handle(
+          _completedAtMeta,
+          completedAt.isAcceptableOrUnknown(
+              data['completed_at']!, _completedAtMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ProgramEnrollment map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProgramEnrollment(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      programId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}program_id'])!,
+      programName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}program_name'])!,
+      startDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_date'])!,
+      currentWeek: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}current_week'])!,
+      currentDay: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}current_day'])!,
+      isActive: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_active'])!,
+      completedAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}completed_at']),
+    );
+  }
+
+  @override
+  $ProgramEnrollmentsTable createAlias(String alias) {
+    return $ProgramEnrollmentsTable(attachedDatabase, alias);
+  }
+}
+
+class ProgramEnrollment extends DataClass
+    implements Insertable<ProgramEnrollment> {
+  final String id;
+  final String programId;
+  final String programName;
+  final DateTime startDate;
+  final int currentWeek;
+  final int currentDay;
+  final bool isActive;
+  final DateTime? completedAt;
+  const ProgramEnrollment(
+      {required this.id,
+      required this.programId,
+      required this.programName,
+      required this.startDate,
+      required this.currentWeek,
+      required this.currentDay,
+      required this.isActive,
+      this.completedAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['program_id'] = Variable<String>(programId);
+    map['program_name'] = Variable<String>(programName);
+    map['start_date'] = Variable<DateTime>(startDate);
+    map['current_week'] = Variable<int>(currentWeek);
+    map['current_day'] = Variable<int>(currentDay);
+    map['is_active'] = Variable<bool>(isActive);
+    if (!nullToAbsent || completedAt != null) {
+      map['completed_at'] = Variable<DateTime>(completedAt);
+    }
+    return map;
+  }
+
+  ProgramEnrollmentsCompanion toCompanion(bool nullToAbsent) {
+    return ProgramEnrollmentsCompanion(
+      id: Value(id),
+      programId: Value(programId),
+      programName: Value(programName),
+      startDate: Value(startDate),
+      currentWeek: Value(currentWeek),
+      currentDay: Value(currentDay),
+      isActive: Value(isActive),
+      completedAt: completedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(completedAt),
+    );
+  }
+
+  factory ProgramEnrollment.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProgramEnrollment(
+      id: serializer.fromJson<String>(json['id']),
+      programId: serializer.fromJson<String>(json['programId']),
+      programName: serializer.fromJson<String>(json['programName']),
+      startDate: serializer.fromJson<DateTime>(json['startDate']),
+      currentWeek: serializer.fromJson<int>(json['currentWeek']),
+      currentDay: serializer.fromJson<int>(json['currentDay']),
+      isActive: serializer.fromJson<bool>(json['isActive']),
+      completedAt: serializer.fromJson<DateTime?>(json['completedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'programId': serializer.toJson<String>(programId),
+      'programName': serializer.toJson<String>(programName),
+      'startDate': serializer.toJson<DateTime>(startDate),
+      'currentWeek': serializer.toJson<int>(currentWeek),
+      'currentDay': serializer.toJson<int>(currentDay),
+      'isActive': serializer.toJson<bool>(isActive),
+      'completedAt': serializer.toJson<DateTime?>(completedAt),
+    };
+  }
+
+  ProgramEnrollment copyWith(
+          {String? id,
+          String? programId,
+          String? programName,
+          DateTime? startDate,
+          int? currentWeek,
+          int? currentDay,
+          bool? isActive,
+          Value<DateTime?> completedAt = const Value.absent()}) =>
+      ProgramEnrollment(
+        id: id ?? this.id,
+        programId: programId ?? this.programId,
+        programName: programName ?? this.programName,
+        startDate: startDate ?? this.startDate,
+        currentWeek: currentWeek ?? this.currentWeek,
+        currentDay: currentDay ?? this.currentDay,
+        isActive: isActive ?? this.isActive,
+        completedAt: completedAt.present ? completedAt.value : this.completedAt,
+      );
+  ProgramEnrollment copyWithCompanion(ProgramEnrollmentsCompanion data) {
+    return ProgramEnrollment(
+      id: data.id.present ? data.id.value : this.id,
+      programId: data.programId.present ? data.programId.value : this.programId,
+      programName:
+          data.programName.present ? data.programName.value : this.programName,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      currentWeek:
+          data.currentWeek.present ? data.currentWeek.value : this.currentWeek,
+      currentDay:
+          data.currentDay.present ? data.currentDay.value : this.currentDay,
+      isActive: data.isActive.present ? data.isActive.value : this.isActive,
+      completedAt:
+          data.completedAt.present ? data.completedAt.value : this.completedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgramEnrollment(')
+          ..write('id: $id, ')
+          ..write('programId: $programId, ')
+          ..write('programName: $programName, ')
+          ..write('startDate: $startDate, ')
+          ..write('currentWeek: $currentWeek, ')
+          ..write('currentDay: $currentDay, ')
+          ..write('isActive: $isActive, ')
+          ..write('completedAt: $completedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, programId, programName, startDate,
+      currentWeek, currentDay, isActive, completedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProgramEnrollment &&
+          other.id == this.id &&
+          other.programId == this.programId &&
+          other.programName == this.programName &&
+          other.startDate == this.startDate &&
+          other.currentWeek == this.currentWeek &&
+          other.currentDay == this.currentDay &&
+          other.isActive == this.isActive &&
+          other.completedAt == this.completedAt);
+}
+
+class ProgramEnrollmentsCompanion extends UpdateCompanion<ProgramEnrollment> {
+  final Value<String> id;
+  final Value<String> programId;
+  final Value<String> programName;
+  final Value<DateTime> startDate;
+  final Value<int> currentWeek;
+  final Value<int> currentDay;
+  final Value<bool> isActive;
+  final Value<DateTime?> completedAt;
+  final Value<int> rowid;
+  const ProgramEnrollmentsCompanion({
+    this.id = const Value.absent(),
+    this.programId = const Value.absent(),
+    this.programName = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.currentWeek = const Value.absent(),
+    this.currentDay = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ProgramEnrollmentsCompanion.insert({
+    required String id,
+    required String programId,
+    required String programName,
+    required DateTime startDate,
+    this.currentWeek = const Value.absent(),
+    this.currentDay = const Value.absent(),
+    this.isActive = const Value.absent(),
+    this.completedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : id = Value(id),
+        programId = Value(programId),
+        programName = Value(programName),
+        startDate = Value(startDate);
+  static Insertable<ProgramEnrollment> custom({
+    Expression<String>? id,
+    Expression<String>? programId,
+    Expression<String>? programName,
+    Expression<DateTime>? startDate,
+    Expression<int>? currentWeek,
+    Expression<int>? currentDay,
+    Expression<bool>? isActive,
+    Expression<DateTime>? completedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (programId != null) 'program_id': programId,
+      if (programName != null) 'program_name': programName,
+      if (startDate != null) 'start_date': startDate,
+      if (currentWeek != null) 'current_week': currentWeek,
+      if (currentDay != null) 'current_day': currentDay,
+      if (isActive != null) 'is_active': isActive,
+      if (completedAt != null) 'completed_at': completedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ProgramEnrollmentsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? programId,
+      Value<String>? programName,
+      Value<DateTime>? startDate,
+      Value<int>? currentWeek,
+      Value<int>? currentDay,
+      Value<bool>? isActive,
+      Value<DateTime?>? completedAt,
+      Value<int>? rowid}) {
+    return ProgramEnrollmentsCompanion(
+      id: id ?? this.id,
+      programId: programId ?? this.programId,
+      programName: programName ?? this.programName,
+      startDate: startDate ?? this.startDate,
+      currentWeek: currentWeek ?? this.currentWeek,
+      currentDay: currentDay ?? this.currentDay,
+      isActive: isActive ?? this.isActive,
+      completedAt: completedAt ?? this.completedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (programId.present) {
+      map['program_id'] = Variable<String>(programId.value);
+    }
+    if (programName.present) {
+      map['program_name'] = Variable<String>(programName.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<DateTime>(startDate.value);
+    }
+    if (currentWeek.present) {
+      map['current_week'] = Variable<int>(currentWeek.value);
+    }
+    if (currentDay.present) {
+      map['current_day'] = Variable<int>(currentDay.value);
+    }
+    if (isActive.present) {
+      map['is_active'] = Variable<bool>(isActive.value);
+    }
+    if (completedAt.present) {
+      map['completed_at'] = Variable<DateTime>(completedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProgramEnrollmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('programId: $programId, ')
+          ..write('programName: $programName, ')
+          ..write('startDate: $startDate, ')
+          ..write('currentWeek: $currentWeek, ')
+          ..write('currentDay: $currentDay, ')
+          ..write('isActive: $isActive, ')
+          ..write('completedAt: $completedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -3315,6 +3986,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FoodLogsTable foodLogs = $FoodLogsTable(this);
   late final $WeightLogsTable weightLogs = $WeightLogsTable(this);
   late final $WorkoutStreaksTable workoutStreaks = $WorkoutStreaksTable(this);
+  late final $WaterLogsTable waterLogs = $WaterLogsTable(this);
+  late final $ProgramEnrollmentsTable programEnrollments =
+      $ProgramEnrollmentsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3326,7 +4000,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         personalRecords,
         foodLogs,
         weightLogs,
-        workoutStreaks
+        workoutStreaks,
+        waterLogs,
+        programEnrollments
       ];
 }
 
@@ -4940,6 +5616,361 @@ typedef $$WorkoutStreaksTableProcessedTableManager = ProcessedTableManager<
     ),
     WorkoutStreak,
     PrefetchHooks Function()>;
+typedef $$WaterLogsTableCreateCompanionBuilder = WaterLogsCompanion Function({
+  required String id,
+  required int amountMl,
+  required DateTime loggedAt,
+  Value<int> rowid,
+});
+typedef $$WaterLogsTableUpdateCompanionBuilder = WaterLogsCompanion Function({
+  Value<String> id,
+  Value<int> amountMl,
+  Value<DateTime> loggedAt,
+  Value<int> rowid,
+});
+
+class $$WaterLogsTableFilterComposer
+    extends Composer<_$AppDatabase, $WaterLogsTable> {
+  $$WaterLogsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get amountMl => $composableBuilder(
+      column: $table.amountMl, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get loggedAt => $composableBuilder(
+      column: $table.loggedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$WaterLogsTableOrderingComposer
+    extends Composer<_$AppDatabase, $WaterLogsTable> {
+  $$WaterLogsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get amountMl => $composableBuilder(
+      column: $table.amountMl, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get loggedAt => $composableBuilder(
+      column: $table.loggedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$WaterLogsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WaterLogsTable> {
+  $$WaterLogsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get amountMl =>
+      $composableBuilder(column: $table.amountMl, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get loggedAt =>
+      $composableBuilder(column: $table.loggedAt, builder: (column) => column);
+}
+
+class $$WaterLogsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $WaterLogsTable,
+    WaterLog,
+    $$WaterLogsTableFilterComposer,
+    $$WaterLogsTableOrderingComposer,
+    $$WaterLogsTableAnnotationComposer,
+    $$WaterLogsTableCreateCompanionBuilder,
+    $$WaterLogsTableUpdateCompanionBuilder,
+    (WaterLog, BaseReferences<_$AppDatabase, $WaterLogsTable, WaterLog>),
+    WaterLog,
+    PrefetchHooks Function()> {
+  $$WaterLogsTableTableManager(_$AppDatabase db, $WaterLogsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WaterLogsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WaterLogsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WaterLogsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<int> amountMl = const Value.absent(),
+            Value<DateTime> loggedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WaterLogsCompanion(
+            id: id,
+            amountMl: amountMl,
+            loggedAt: loggedAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required int amountMl,
+            required DateTime loggedAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WaterLogsCompanion.insert(
+            id: id,
+            amountMl: amountMl,
+            loggedAt: loggedAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$WaterLogsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $WaterLogsTable,
+    WaterLog,
+    $$WaterLogsTableFilterComposer,
+    $$WaterLogsTableOrderingComposer,
+    $$WaterLogsTableAnnotationComposer,
+    $$WaterLogsTableCreateCompanionBuilder,
+    $$WaterLogsTableUpdateCompanionBuilder,
+    (WaterLog, BaseReferences<_$AppDatabase, $WaterLogsTable, WaterLog>),
+    WaterLog,
+    PrefetchHooks Function()>;
+typedef $$ProgramEnrollmentsTableCreateCompanionBuilder
+    = ProgramEnrollmentsCompanion Function({
+  required String id,
+  required String programId,
+  required String programName,
+  required DateTime startDate,
+  Value<int> currentWeek,
+  Value<int> currentDay,
+  Value<bool> isActive,
+  Value<DateTime?> completedAt,
+  Value<int> rowid,
+});
+typedef $$ProgramEnrollmentsTableUpdateCompanionBuilder
+    = ProgramEnrollmentsCompanion Function({
+  Value<String> id,
+  Value<String> programId,
+  Value<String> programName,
+  Value<DateTime> startDate,
+  Value<int> currentWeek,
+  Value<int> currentDay,
+  Value<bool> isActive,
+  Value<DateTime?> completedAt,
+  Value<int> rowid,
+});
+
+class $$ProgramEnrollmentsTableFilterComposer
+    extends Composer<_$AppDatabase, $ProgramEnrollmentsTable> {
+  $$ProgramEnrollmentsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get programId => $composableBuilder(
+      column: $table.programId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get programName => $composableBuilder(
+      column: $table.programName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentWeek => $composableBuilder(
+      column: $table.currentWeek, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentDay => $composableBuilder(
+      column: $table.currentDay, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnFilters(column));
+}
+
+class $$ProgramEnrollmentsTableOrderingComposer
+    extends Composer<_$AppDatabase, $ProgramEnrollmentsTable> {
+  $$ProgramEnrollmentsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get programId => $composableBuilder(
+      column: $table.programId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get programName => $composableBuilder(
+      column: $table.programName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get startDate => $composableBuilder(
+      column: $table.startDate, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentWeek => $composableBuilder(
+      column: $table.currentWeek, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentDay => $composableBuilder(
+      column: $table.currentDay, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isActive => $composableBuilder(
+      column: $table.isActive, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ProgramEnrollmentsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ProgramEnrollmentsTable> {
+  $$ProgramEnrollmentsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get programId =>
+      $composableBuilder(column: $table.programId, builder: (column) => column);
+
+  GeneratedColumn<String> get programName => $composableBuilder(
+      column: $table.programName, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<int> get currentWeek => $composableBuilder(
+      column: $table.currentWeek, builder: (column) => column);
+
+  GeneratedColumn<int> get currentDay => $composableBuilder(
+      column: $table.currentDay, builder: (column) => column);
+
+  GeneratedColumn<bool> get isActive =>
+      $composableBuilder(column: $table.isActive, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get completedAt => $composableBuilder(
+      column: $table.completedAt, builder: (column) => column);
+}
+
+class $$ProgramEnrollmentsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $ProgramEnrollmentsTable,
+    ProgramEnrollment,
+    $$ProgramEnrollmentsTableFilterComposer,
+    $$ProgramEnrollmentsTableOrderingComposer,
+    $$ProgramEnrollmentsTableAnnotationComposer,
+    $$ProgramEnrollmentsTableCreateCompanionBuilder,
+    $$ProgramEnrollmentsTableUpdateCompanionBuilder,
+    (
+      ProgramEnrollment,
+      BaseReferences<_$AppDatabase, $ProgramEnrollmentsTable, ProgramEnrollment>
+    ),
+    ProgramEnrollment,
+    PrefetchHooks Function()> {
+  $$ProgramEnrollmentsTableTableManager(
+      _$AppDatabase db, $ProgramEnrollmentsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ProgramEnrollmentsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ProgramEnrollmentsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ProgramEnrollmentsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> programId = const Value.absent(),
+            Value<String> programName = const Value.absent(),
+            Value<DateTime> startDate = const Value.absent(),
+            Value<int> currentWeek = const Value.absent(),
+            Value<int> currentDay = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<DateTime?> completedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ProgramEnrollmentsCompanion(
+            id: id,
+            programId: programId,
+            programName: programName,
+            startDate: startDate,
+            currentWeek: currentWeek,
+            currentDay: currentDay,
+            isActive: isActive,
+            completedAt: completedAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String id,
+            required String programId,
+            required String programName,
+            required DateTime startDate,
+            Value<int> currentWeek = const Value.absent(),
+            Value<int> currentDay = const Value.absent(),
+            Value<bool> isActive = const Value.absent(),
+            Value<DateTime?> completedAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              ProgramEnrollmentsCompanion.insert(
+            id: id,
+            programId: programId,
+            programName: programName,
+            startDate: startDate,
+            currentWeek: currentWeek,
+            currentDay: currentDay,
+            isActive: isActive,
+            completedAt: completedAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ProgramEnrollmentsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $ProgramEnrollmentsTable,
+    ProgramEnrollment,
+    $$ProgramEnrollmentsTableFilterComposer,
+    $$ProgramEnrollmentsTableOrderingComposer,
+    $$ProgramEnrollmentsTableAnnotationComposer,
+    $$ProgramEnrollmentsTableCreateCompanionBuilder,
+    $$ProgramEnrollmentsTableUpdateCompanionBuilder,
+    (
+      ProgramEnrollment,
+      BaseReferences<_$AppDatabase, $ProgramEnrollmentsTable, ProgramEnrollment>
+    ),
+    ProgramEnrollment,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4958,4 +5989,8 @@ class $AppDatabaseManager {
       $$WeightLogsTableTableManager(_db, _db.weightLogs);
   $$WorkoutStreaksTableTableManager get workoutStreaks =>
       $$WorkoutStreaksTableTableManager(_db, _db.workoutStreaks);
+  $$WaterLogsTableTableManager get waterLogs =>
+      $$WaterLogsTableTableManager(_db, _db.waterLogs);
+  $$ProgramEnrollmentsTableTableManager get programEnrollments =>
+      $$ProgramEnrollmentsTableTableManager(_db, _db.programEnrollments);
 }

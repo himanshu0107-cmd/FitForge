@@ -113,6 +113,29 @@ class WorkoutStreaks extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class WaterLogs extends Table {
+  TextColumn get id => text()();
+  IntColumn get amountMl => integer()();
+  DateTimeColumn get loggedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+class ProgramEnrollments extends Table {
+  TextColumn get id => text()();
+  TextColumn get programId => text()();
+  TextColumn get programName => text()();
+  DateTimeColumn get startDate => dateTime()();
+  IntColumn get currentWeek => integer().withDefault(const Constant(1))();
+  IntColumn get currentDay => integer().withDefault(const Constant(1))();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get completedAt => dateTime().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 // ─────────────────────────────────────────
 // DATABASE
 // ─────────────────────────────────────────
@@ -126,13 +149,15 @@ class WorkoutStreaks extends Table {
     FoodLogs,
     WeightLogs,
     WorkoutStreaks,
+    WaterLogs,
+    ProgramEnrollments,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
