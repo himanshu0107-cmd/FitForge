@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:uuid/uuid.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
+import 'package:fitforge/core/providers/diet_provider.dart';
 import 'package:fitforge/core/constants/app_enums.dart';
 import 'package:fitforge/core/utils/tdee_calculator.dart';
 import 'package:fitforge/domain/models/diet_and_progress.dart';
@@ -254,19 +255,14 @@ class _DietScreenState extends ConsumerState<DietScreen>
                   child: _PressScale(
                     onTap: () {
                       if (nameCtrl.text.trim().isEmpty) return;
-                      ref.read(foodLogProvider.notifier).logFood(
-                            FoodEntry(
-                              id: _uuid.v4(),
-                              foodName: nameCtrl.text.trim(),
-                              grams: double.tryParse(gramsCtrl.text) ?? 100,
-                              calories: int.tryParse(calCtrl.text) ?? 0,
-                              proteinGrams:
-                                  double.tryParse(proteinCtrl.text) ?? 0,
-                              carbGrams: double.tryParse(carbCtrl.text) ?? 0,
-                              fatGrams: double.tryParse(fatCtrl.text) ?? 0,
-                              mealType: selectedType,
-                              loggedAt: DateTime.now(),
-                            ),
+                      ref.read(dietNotifierProvider.notifier).logFood(
+                            foodName: nameCtrl.text.trim(),
+                            grams: double.tryParse(gramsCtrl.text) ?? 100,
+                            calories: int.tryParse(calCtrl.text) ?? 0,
+                            protein: double.tryParse(proteinCtrl.text) ?? 0,
+                            carbs: double.tryParse(carbCtrl.text) ?? 0,
+                            fat: double.tryParse(fatCtrl.text) ?? 0,
+                            mealType: selectedType,
                           );
                       Navigator.pop(ctx);
                     },
@@ -300,7 +296,8 @@ class _TodayTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foodLogAsync = ref.watch(foodLogProvider);
+    final selectedDate = ref.watch(selectedDateProvider);
+    final foodLogAsync = ref.watch(dailyFoodLogsProvider(selectedDate));
     final profileAsync = ref.watch(userProfileProvider);
 
     return foodLogAsync.when(
@@ -509,7 +506,7 @@ class _MealGroup extends StatelessWidget {
               key: Key(e.id),
               direction: DismissDirection.endToStart,
               onDismissed: (_) =>
-                  ref.read(foodLogProvider.notifier).deleteEntry(e.id),
+                  ref.read(dietNotifierProvider.notifier).deleteFood(e.id),
               background: Container(
                 alignment: Alignment.centerRight,
                 padding: const EdgeInsets.only(right: 16),

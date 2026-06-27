@@ -157,7 +157,7 @@ class MealIngredient {
       );
 }
 
-class FoodEntry {
+class FoodLog {
   final String id;
   final String foodName;
   final double grams;
@@ -168,7 +168,7 @@ class FoodEntry {
   final MealType mealType;
   final DateTime loggedAt;
 
-  const FoodEntry({
+  const FoodLog({
     required this.id,
     required this.foodName,
     required this.grams,
@@ -192,7 +192,7 @@ class FoodEntry {
         'loggedAt': loggedAt.toIso8601String(),
       };
 
-  factory FoodEntry.fromJson(Map<String, dynamic> json) => FoodEntry(
+  factory FoodLog.fromJson(Map<String, dynamic> json) => FoodLog(
         id: json['id'] as String,
         foodName: json['foodName'] as String,
         grams: (json['grams'] as num).toDouble(),
@@ -207,6 +207,8 @@ class FoodEntry {
         loggedAt: DateTime.parse(json['loggedAt'] as String),
       );
 }
+
+typedef FoodEntry = FoodLog;
 
 class WeightLog {
   final String id;

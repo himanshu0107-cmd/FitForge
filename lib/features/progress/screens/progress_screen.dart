@@ -5,6 +5,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
 import 'package:fitforge/core/providers/app_providers.dart';
+import 'package:fitforge/core/providers/progress_provider.dart';
+import 'package:fitforge/core/providers/workout_provider.dart';
 import 'package:fitforge/domain/models/workout.dart';
 
 class ProgressScreen extends ConsumerWidget {
@@ -79,8 +81,7 @@ class ProgressScreen extends ConsumerWidget {
         color: AppColors.primary,
         backgroundColor: AppColors.darkCard,
         onRefresh: () async {
-          ref.invalidate(weightLogProvider);
-          ref.invalidate(personalRecordsProvider);
+          ref.invalidate(weightHistoryProvider);
           ref.invalidate(workoutHistoryProvider);
         },
         child: ListView(
@@ -137,7 +138,7 @@ class ProgressScreen extends ConsumerWidget {
             onPressed: () {
               final w = double.tryParse(ctrl.text);
               if (w != null && w > 0) {
-                ref.read(weightLogProvider.notifier).addEntry(w);
+                ref.read(progressNotifierProvider.notifier).logWeight(w);
                 Navigator.pop(ctx);
               }
             },
@@ -159,7 +160,7 @@ class _WeightChartSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final logsAsync = ref.watch(weightLogProvider);
+    final logsAsync = ref.watch(weightHistoryProvider);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -410,7 +411,7 @@ class _PersonalRecordsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final prsAsync = ref.watch(personalRecordsProvider);
+    final historyAsync = ref.watch(workoutHistoryProvider);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -433,9 +434,9 @@ class _PersonalRecordsSection extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
-          prsAsync.when(
-            data: (prs) {
-              if (prs.isEmpty) {
+          historyAsync.when(
+            data: (sessions) {
+              if (sessions.isEmpty) {
                 return Column(
                   children: [
                     const Text('🎯', style: TextStyle(fontSize: 36)),
@@ -458,14 +459,59 @@ class _PersonalRecordsSection extends ConsumerWidget {
                 );
               }
 
+              final bestSets = <String, dynamic>{};
+              for (var session in sessions) {
+                for (var log in session.exerciseLogs) {
+                  if (log.sets.isEmpty) continue;
+                  final best = log.bestSet;
+                  if (best == null) continue;
+
+                  final key = log.exerciseId;
+                  final existing = bestSets[key];
+                  if (existing == null ||
+                      (best.weightKg * best.reps) >
+                          (existing['weight'] * existing['reps'])) {
+                    bestSets[key] = {
+                      'name': log.exerciseName,
+                      'weight': best.weightKg,
+                      'reps': best.reps,
+                      'date': session.startTime,
+                    };
+                  }
+                }
+              }
+
+              if (bestSets.isEmpty) {
+                return Column(
+                  children: [
+                    const Text('🎯', style: TextStyle(fontSize: 36)),
+                    const SizedBox(height: 8),
+                    Text(
+                      'No PRs yet',
+                      style: GoogleFonts.rajdhani(
+                        fontSize: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                );
+              }
+
               return Column(
-                children: prs.take(10).map((pr) => _PRRow(pr: pr)).toList(),
+                children: bestSets.entries.take(10).map((entry) {
+                  final data = entry.value;
+                  return _PRRow(
+                    name: data['name'],
+                    weight: data['weight'],
+                    reps: data['reps'],
+                    date: data['date'],
+                  );
+                }).toList(),
               );
             },
             loading: () => const Center(
                 child: CircularProgressIndicator(color: AppColors.primary)),
-            error: (e, _) =>
-                Text('Error: $e'),
+            error: (e, _) => Text('Error: $e'),
           ),
         ],
       ),
@@ -474,11 +520,16 @@ class _PersonalRecordsSection extends ConsumerWidget {
 }
 
 class _PRRow extends StatelessWidget {
-  final PersonalRecord pr;
-  const _PRRow({required this.pr});
+  final String name;
+  final double weight;
+  final int reps;
+  final DateTime date;
+  
+  const _PRRow({required this.name, required this.weight, required this.reps, required this.date});
 
   @override
   Widget build(BuildContext context) {
+    final oneRepMax = weight * (1 + reps / 30.0);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -500,7 +551,7 @@ class _PRRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pr.exerciseName,
+                  name,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -508,7 +559,7 @@ class _PRRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat('d MMM yyyy').format(pr.achievedAt),
+                  DateFormat('d MMM yyyy').format(date),
                   style: GoogleFonts.inter(
                       fontSize: 11, color: AppColors.textMuted),
                 ),
@@ -519,7 +570,7 @@ class _PRRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${pr.weightKg}kg × ${pr.reps}',
+                '${weight}kg × $reps',
                 style: GoogleFonts.rajdhani(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -527,7 +578,7 @@ class _PRRow extends StatelessWidget {
                 ),
               ),
               Text(
-                '1RM: ${pr.oneRepMax.toStringAsFixed(1)}kg',
+                '1RM: ${oneRepMax.toStringAsFixed(1)}kg',
                 style: GoogleFonts.inter(
                     fontSize: 10, color: AppColors.textMuted),
               ),

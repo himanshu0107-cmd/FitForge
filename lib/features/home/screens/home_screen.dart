@@ -1,96 +1,15 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fitforge/core/constants/app_constants.dart';
-import 'package:fitforge/core/constants/app_enums.dart';
-import 'package:fitforge/core/theme/app_theme.dart';
-import 'package:fitforge/core/providers/app_providers.dart';
-import 'package:fitforge/domain/models/user_profile.dart';
+import '../widgets/home_dashboard.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileAsync = ref.watch(userProfileProvider);
-    final todayCalories = ref.watch(todayCaloriesProvider);
-    final streakAsync = ref.watch(streakProvider);
-    final foodLog = ref.watch(foodLogProvider);
-    final weeklyWorkoutsAsync = ref.watch(weeklyWorkoutsProvider);
-    final todayProtein = foodLog.maybeWhen(
-      data: (entries) =>
-          entries.fold<double>(0, (s, e) => s + e.proteinGrams).toInt(),
-      orElse: () => 0,
-    );
 
-    return Scaffold(
-      backgroundColor: AppColors.darkBackground,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          _HeroAppBar(profileAsync: profileAsync, streakAsync: streakAsync),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                const SizedBox(height: 20),
-
-                // ── Bento top row: calorie ring + macro stack ──
-                profileAsync.when(
-                  data: (profile) => _BentoNutritionRow(
-                    eaten: todayCalories,
-                    goal: profile?.calorieGoal ?? 2500,
-                    proteinEaten: todayProtein,
-                    proteinGoal: profile?.proteinGoal ?? 150,
-                    carbEaten: foodLog.maybeWhen(
-                      data: (entries) => entries
-                          .fold<double>(0, (s, e) => s + e.carbGrams)
-                          .toInt(),
-                      orElse: () => 0,
-                    ),
-                    carbGoal: profile?.carbGoal ?? 300,
-                    fatEaten: foodLog.maybeWhen(
-                      data: (entries) => entries
-                          .fold<double>(0, (s, e) => s + e.fatGrams)
-                          .toInt(),
-                      orElse: () => 0,
-                    ),
-                    fatGoal: profile?.fatGoal ?? 80,
-                  ),
-                  loading: () => const _ShimmerBento(),
-                  error: (_, __) => const SizedBox(),
-                ),
-
-                const SizedBox(height: 14),
-
-                // ── Stats strip ──
-                _StatsStrip(
-                  weeklyWorkouts: weeklyWorkoutsAsync.valueOrNull ?? 0,
-                  streak: streakAsync.valueOrNull ?? 0,
-                ),
-
-                const SizedBox(height: 14),
-
-                // ── Quick Actions ──
-                const _QuickActionsRow(),
-
-                const SizedBox(height: 14),
-
-                // ── Today's Workout ──
-                const _TodayWorkoutCard(),
-
-                const SizedBox(height: 14),
-
-                // ── Motivation ──
-                const _MotivationCard(),
-              ]),
-            ),
-          ),
-        ],
-      ),
+    return const Scaffold(
+      body: HomeDashboard(),
     );
   }
 }

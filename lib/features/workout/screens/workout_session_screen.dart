@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fitforge/core/constants/app_constants.dart';
 import 'package:fitforge/core/theme/app_theme.dart';
-import 'package:fitforge/core/providers/app_providers.dart';
+import 'package:fitforge/core/providers/workout_provider.dart';
 import 'package:fitforge/domain/models/workout.dart';
 import 'package:uuid/uuid.dart';
 import 'package:fitforge/core/services/notification_service.dart';
@@ -403,24 +403,26 @@ class _WorkoutSessionScreenState extends ConsumerState<WorkoutSessionScreen> {
   }
 
   void _handleComplete(WorkoutSessionState state) async {
-    final notifier = ref.read(workoutSessionNotifierProvider.notifier);
-    notifier.startSession(widget.planId, widget.workoutName);
+    final notifier = ref.read(activeWorkoutProvider.notifier);
+    
+    await notifier.startWorkout(
+      widget.workoutName,
+      widget.exercises,
+    );
 
     for (final ex in widget.exercises) {
       final sets = state.setLogs[ex.exerciseId] ?? [];
       if (sets.isNotEmpty) {
-        notifier.addExerciseLog(ExerciseLog(
-          id: _uuid.v4(),
-          exerciseId: ex.exerciseId,
-          exerciseName: ex.exerciseName,
-          sets: sets,
-        ));
+        for (final set in sets) {
+          notifier.addSet(ex.exerciseId, set.reps, set.weightKg);
+        }
       }
     }
 
-    final session = await notifier.completeSession();
+    await notifier.completeWorkout();
+    
     if (mounted) {
-      context.go(AppRoutes.workoutSummary, extra: session);
+      context.go(AppRoutes.home);
     }
   }
 }
